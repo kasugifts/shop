@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasu Admin Panel</title>
+<style>
+:root {
+  --bg: #0f1117; --surface: #1a1d27; --surface2: #22263a; --border: #2a2d3e;
+  --coral: #da6e59; --green: #4caf76; --blue: #4a9eff; --yellow: #f7b731;
+  --red: #e74c3c; --text: #e8eaf0; --muted: #7c8099; --radius: 10px;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+/* ── LOGIN ── */
+.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#1a1d27,#0f1117); }
+.login-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:52px 44px; width:min(420px,90vw); text-align:center; animation:fadeUp 0.5s ease; }
+.login-logo { font-size:3.5rem; margin-bottom:18px; }
+.login-title { font-size:1.6rem; font-weight:900; margin-bottom:6px; }
+.login-sub { color:var(--muted); font-size:0.9rem; margin-bottom:36px; }
+.login-input { width:100%; padding:15px 18px; background:var(--surface2); border:2px solid var(--border); border-radius:12px; color:var(--text); font-size:1rem; font-family:inherit; margin-bottom:14px; transition:border-color 0.2s; letter-spacing:2px; }
+.login-input:focus { outline:none; border-color:var(--coral); }
+.login-btn { width:100%; padding:15px; background:var(--coral); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:800; cursor:pointer; transition:all 0.2s; font-family:inherit; }
+.login-btn:hover { background:#c45f4a; transform:translateY(-2px); }
+.login-err { color:var(--red); font-size:0.85rem; margin-top:12px; display:none; }
+.login-err.show { display:block; }
+
+/* ── ADMIN LAYOUT ── */
+.admin-layout { display:none; min-height:100vh; }
+.admin-layout.show { display:flex; }
+
+/* ── SIDEBAR ── */
+.sidebar { width:250px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; height:100vh; z-index:100; }
+.sidebar-brand { padding:28px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.sidebar-logo { font-size:1.8rem; }
+.sidebar-name { font-size:1.05rem; font-weight:900; color:var(--coral); }
+.sidebar-sub { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+.sidebar-nav { flex:1; padding:18px 12px; }
+.nav-section { font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); padding:0 10px; margin:16px 0 8px; }
+.nav-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius); cursor:pointer; font-size:0.9rem; font-weight:700; color:var(--muted); transition:all 0.2s; margin-bottom:3px; border:none; background:none; width:100%; text-align:left; font-family:inherit; }
+.nav-item:hover { background:var(--surface2); color:var(--text); }
+.nav-item.active { background:rgba(218,110,89,0.15); color:var(--coral); }
+.nav-icon { font-size:1.1rem; width:22px; text-align:center; flex-shrink:0; }
+.sidebar-foot { padding:20px 22px; border-top:1px solid var(--border); }
+.logout-btn { width:100%; padding:10px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); border-radius:var(--radius); cursor:pointer; font-size:0.82rem; font-weight:700; font-family:inherit; transition:all 0.2s; }
+.logout-btn:hover { background:rgba(231,76,60,0.1); color:var(--red); border-color:rgba(231,76,60,0.3); }
+
+/* ── MAIN ── */
+.admin-main { flex:1; margin-left:250px; min-height:100vh; display:flex; flex-direction:column; }
+.tab-content { display:none; flex:1; flex-direction:column; }
+.tab-content.active { display:flex; }
+
+/* ── TOP BAR ── */
+.top-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50; }
+.top-bar-left h2 { font-size:1.15rem; font-weight:900; }
+.top-bar-left p { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+.top-bar-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.tab-body { padding:28px 32px; flex:1; }
+
+/* ── BUTTONS ── */
+.btn { padding:9px 18px; border-radius:8px; font-size:0.82rem; font-weight:800; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; display:inline-flex; align-items:center; gap:6px; }
+.btn:active { transform:scale(0.97); }
+.btn-primary { background:var(--coral); color:white; }
+.btn-primary:hover { background:#c45f4a; }
+.btn-ghost { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+.btn-ghost:hover { background:var(--border); }
+.btn-danger { background:rgba(231,76,60,0.1); color:var(--red); border:1px solid rgba(231,76,60,0.25); }
+.btn-danger:hover { background:rgba(231,76,60,0.2); }
+.btn-success { background:rgba(76,175,118,0.1); color:var(--green); border:1px solid rgba(76,175,118,0.25); }
+.btn-success:hover { background:rgba(76,175,118,0.2); }
+
+/* ── STATS ── */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:16px; margin-bottom:28px; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.stat-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:800; margin-bottom:8px; }
+.stat-value { font-size:2.2rem; font-weight:900; line-height:1; }
+.stat-sub { font-size:0.75rem; color:var(--muted); margin-top:6px; }
+
+/* ── TABLE CARD ── */
+.table-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.table-card-hdr { padding:16px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.table-card-title { font-size:0.95rem; font-weight:800; }
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; }
+th { padding:11px 16px; text-align:left; font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:800; border-bottom:1px solid var(--border); white-space:nowrap; background:var(--surface2); }
+td { padding:13px 16px; font-size:0.87rem; border-bottom:1px solid rgba(42,45,62,0.5); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,0.02); }
+
+/* ── BADGES ── */
+.badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:0.7rem; font-weight:800; white-space:nowrap; }
+.badge-processing { background:rgba(247,183,49,0.12); color:var(--yellow); }
+.badge-confirmed { background:rgba(74,158,255,0.12); color:var(--blue); }
+.badge-packed { background:rgba(147,112,219,0.12); color:#9370db; }
+.badge-shipped { background:rgba(255,159,64,0.12); color:#ff9f40; }
+.badge-out_for_delivery { background:rgba(218,110,89,0.12); color:var(--coral); }
+.badge-delivered { background:rgba(76,175,118,0.12); color:var(--green); }
+.badge-mobile { background:rgba(74,158,255,0.1); color:var(--blue); }
+.badge-desktop { background:rgba(147,112,219,0.1); color:#9370db; }
+.badge-tablet { background:rgba(76,175,118,0.1); color:var(--green); }
+.badge-unknown { background:rgba(124,128,153,0.1); color:var(--muted); }
+
+/* ── STATUS SELECT ── */
+.status-sel { background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; font-size:0.8rem; font-family:inherit; cursor:pointer; }
+.status-sel:focus { outline:none; border-color:var(--coral); }
+
+/* ── SEARCH ── */
+.search-box { padding:9px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.85rem; font-family:inherit; min-width:200px; }
+.search-box:focus { outline:none; border-color:var(--coral); }
+.search-box::placeholder { color:var(--muted); }
+
+/* ── IP GROUPS ── */
+.ip-group { border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; }
+.ip-group-hdr { padding:14px 20px; background:var(--surface); display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:12px; transition:background 0.2s; }
+.ip-group-hdr:hover { background:var(--surface2); }
+.ip-left { display:flex; align-items:center; gap:14px; flex:1; flex-wrap:wrap; min-width:0; }
+.ip-address { font-weight:900; font-size:0.95rem; color:var(--blue); font-family:monospace; flex-shrink:0; }
+.ip-meta { display:flex; gap:16px; flex-wrap:wrap; }
+.ip-meta span { font-size:0.78rem; color:var(--muted); }
+.ip-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.ip-chevron { color:var(--muted); font-size:0.7rem; transition:transform 0.25s; }
+.ip-chevron.open { transform:rotate(180deg); }
+.ip-sessions { display:none; border-top:1px solid var(--border); }
+.ip-sessions.open { display:block; }
+
+/* ── REVIEW FORM ── */
+.form-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px; }
+.form-card h3 { font-size:0.95rem; font-weight:900; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.fgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.fg { margin-bottom:14px; }
+.fg label { display:block; font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:800; margin-bottom:7px; }
+.fg input, .fg select, .fg textarea { width:100%; padding:10px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.88rem; font-family:inherit; transition:border-color 0.2s; resize:vertical; }
+.fg input:focus, .fg select:focus, .fg textarea:focus { outline:none; border-color:var(--coral); }
+.fg select option { background:var(--surface2); }
+.check-row { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.check-row input[type=checkbox] { width:16px; height:16px; accent-color:var(--coral); cursor:pointer; flex-shrink:0; }
+.check-row label { font-size:0.85rem; font-weight:700; cursor:pointer; margin:0; }
+
+/* ── EMPTY / LOADER ── */
+.empty { padding:60px; text-align:center; }
+.empty-ico { font-size:3rem; margin-bottom:12px; }
+.empty-txt { color:var(--muted); font-size:0.9rem; }
+.spinner { border:3px solid var(--border); border-top:3px solid var(--coral); border-radius:50%; width:34px; height:34px; animation:spin 0.8s linear infinite; margin:40px auto; }
+.loader-wrap { text-align:center; padding:40px; color:var(--muted); font-size:0.88rem; }
+
+/* ── MODAL ── */
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px); }
+.modal-bg.show { display:flex; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:min(580px,100%); max-height:85vh; display:flex; flex-direction:column; }
+.modal-hdr { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.modal-title { font-size:1rem; font-weight:900; }
+.modal-x { background:var(--surface2); border:1px solid var(--border); color:var(--muted); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.modal-x:hover { color:white; background:var(--border); transform:rotate(90deg); }
+.modal-body { padding:24px; overflow-y:auto; flex:1; }
+.drow { display:flex; gap:10px; padding:11px 0; border-bottom:1px solid var(--border); font-size:0.87rem; }
+.drow:last-child { border-bottom:none; }
+.dkey { color:var(--muted); font-weight:800; min-width:120px; flex-shrink:0; font-size:0.8rem; }
+.dval { color:var(--text); word-break:break-word; }
+.item-chip { background:var(--surface2); border:1px solid var(--border); padding:8px 14px; border-radius:8px; font-size:0.83rem; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.item-chip-price { color:var(--coral); font-weight:900; }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:13px 20px; border-radius:10px; font-size:0.85rem; font-weight:700; z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:320px; }
+.toast.show { transform:translateY(0); opacity:1; }
+
+@media(max-width:768px){
+  .sidebar { transform:translateX(-100%); transition:transform 0.3s; }
+  .sidebar.open { transform:translateX(0); }
+  .admin-main { margin-left:0; }
+  .tab-body { padding:16px; }
+  .fgrid { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🔐</div>
+    <div class="login-title">Kasu Admin</div>
+    <div class="login-sub">Restricted access — authorized personnel only</div>
+    <input class="login-input" id="pw-input" type="password" placeholder="Enter password"
+      onkeydown="if(event.key==='Enter')tryLogin()">
+    <button class="login-btn" onclick="tryLogin()">Sign In →</button>
+    <div class="login-err" id="login-err">❌ Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ══ ADMIN ══ -->
+<div class="admin-layout" id="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">🎁</div>
+      <div>
+        <div class="sidebar-name">Kasu Admin</div>
+        <div class="sidebar-sub">Management Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Management</div>
+      <button class="nav-item active" onclick="switchTab('orders',this)">
+        <span class="nav-icon">📦</span> Orders
+      </button>
+      <button class="nav-item" onclick="switchTab('sessions',this)">
+        <span class="nav-icon">📊</span> Sessions
+      </button>
+      <button class="nav-item" onclick="switchTab('reviews',this)">
+        <span class="nav-icon">⭐</span> Reviews
+      </button>
+    </nav>
+    <div class="sidebar-foot">
+      <button class="logout-btn" onclick="logout()">🚪 Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- ── ORDERS TAB ── -->
+    <div id="tab-orders" class="tab-content active">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h2>📦 Orders</h2>
+          <p>View, edit and manage all customer orders</p>
+        </div>
+        <div class="top-bar-right">
+          <input class="search-box" id="order-search" placeholder="🔍 Search by ID, name, status…" oninput="filterOrders()">
+          <button class="btn btn-ghost" onclick="loadOrders()">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="tab-body">
+        <div class="stats-grid" id="order-stats"></div>
+        <div class="table-card">
+          <div class="table-card-hdr">
+            <div class="table-card-title">All Orders</div>
+            <div id="order-count" style="font-size:0.8rem;color:var(--muted)"></div>
+          </div>
+          <div id="orders-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SESSIONS TAB ── -->
+    <div id="tab-sessions" class="tab-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h2>📊 Sessions</h2>
+          <p>User sessions grouped by IP address</p>
+        </div>
+        <div class="top-bar-right">
+          <button class="btn btn-danger" onclick="deleteAllSessions()">🗑️ Delete All</button>
+          <button class="btn btn-ghost" onclick="loadSessions()">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="tab-body">
+        <div class="stats-grid" id="session-stats"></div>
+        <div id="sessions-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ── REVIEWS TAB ── -->
+    <div id="tab-reviews" class="tab-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h2>⭐ Reviews</h2>
+          <p>Add and remove product reviews</p>
+        </div>
+        <div class="top-bar-right">
+          <button class="btn btn-ghost" onclick="loadReviews()">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="tab-body">
+        <!-- Add Review -->
+        <div class="form-card">
+          <h3>➕ Add New Review</h3>
+          <div class="fgrid">
+            <div class="fg">
+              <label>Product *</label>
+              <select id="rv-product"><option value="">Loading products…</option></select>
+            </div>
+            <div class="fg">
+              <label>Reviewer Name *</label>
+              <input id="rv-name" type="text" placeholder="e.g. Priya S.">
+            </div>
+          </div>
+          <div class="fgrid">
+            <div class="fg">
+              <label>Rating *</label>
+              <select id="rv-rating">
+                <option value="5">⭐⭐⭐⭐⭐ — Excellent (5)</option>
+                <option value="4">⭐⭐⭐⭐ — Good (4)</option>
+                <option value="3">⭐⭐⭐ — Average (3)</option>
+                <option value="2">⭐⭐ — Poor (2)</option>
+                <option value="1">⭐ — Terrible (1)</option>
+              </select>
+            </div>
+            <div class="fg" style="display:flex;align-items:flex-end;">
+              <div class="check-row">
+                <input type="checkbox" id="rv-verified" checked>
+                <label for="rv-verified">Mark as Verified Purchase</label>
+              </div>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Review Text *</label>
+            <textarea id="rv-text" rows="3" placeholder="Write the review content here…"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="addReview()">✨ Add Review</button>
+        </div>
+
+        <!-- Reviews Table -->
+        <div class="table-card">
+          <div class="table-card-hdr">
+            <div class="table-card-title">All Reviews</div>
+            <div id="review-count" style="font-size:0.8rem;color:var(--muted)"></div>
+          </div>
+          <div id="reviews-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-bg" id="order-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">📦 Order Details</div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// CONFIG — replace with your real values
+// ══════════════════════════════════════════════
+const SB_URL = 'https://aawhuykfhjsjtwrstnvt.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk'; // starts with eyJ...
+const PASS    = 'kaptan';
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let allOrders   = [];
+let allSessions = [];
+let allReviews  = [];
+let products    = [];
+
+// ══════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════
+function tryLogin() {
+  const pw  = document.getElementById('pw-input').value;
+  const err = document.getElementById('login-err');
+  if (pw === PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-layout').classList.add('show');
+    initAdmin();
+  } else {
+    err.classList.add('show');
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+    setTimeout(() => err.classList.remove('show'), 3000);
+  }
+}
+
+function logout() {
+  document.getElementById('admin-layout').classList.remove('show');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+}
+
+// ══════════════════════════════════════════════
+// SUPABASE HELPER
+// ══════════════════════════════════════════════
+async function sb(path, method = 'GET', body = null) {
+  const h = {
+    'apikey': SB_KEY,
+    'Authorization': `Bearer ${SB_KEY}`,
+    'Content-Type': 'application/json'
+  };
+  if (method === 'POST')   h['Prefer'] = 'return=representation';
+  if (method === 'PATCH')  h['Prefer'] = 'return=minimal';
+  if (method === 'DELETE') h['Prefer'] = 'return=minimal';
+
+  const res  = await fetch(`${SB_URL}/rest/v1/${path}`, {
+    method, headers: h,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(text || `HTTP ${res.status}`);
+  return text ? JSON.parse(text) : [];
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+async function initAdmin() {
+  try {
+    products = await sb('products?select=id,name&order=id');
+    const sel = document.getElementById('rv-product');
+    if (products.length) {
+      sel.innerHTML = products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
+    } else {
+      sel.innerHTML = '<option value="">No products found</option>';
+    }
+  } catch(e) {
+    document.getElementById('rv-product').innerHTML = '<option value="">Failed to load</option>';
+  }
+  loadOrders();
+}
+
+// ══════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'orders')   loadOrders();
+  if (name === 'sessions') loadSessions();
+  if (name === 'reviews')  loadReviews();
+}
+
+// ══════════════════════════════════════════════
+// ██ ORDERS
+// ══════════════════════════════════════════════
+const STATUS_LIST   = ['processing','confirmed','packed','shipped','out_for_delivery','delivered'];
+const STATUS_LABELS = {
+  processing:'Processing', confirmed:'Confirmed', packed:'Packed',
+  shipped:'Shipped', out_for_delivery:'Out for Delivery', delivered:'Delivered'
+};
+
+async function loadOrders() {
+  setLoading('orders-wrap');
+  document.getElementById('order-stats').innerHTML = '';
+  document.getElementById('order-count').textContent = '';
+  try {
+    allOrders = await sb('orders?select=*&order=created_at.desc');
+    renderOrderStats();
+    renderOrdersTable(allOrders);
+  } catch(e) {
+    showErr('orders-wrap', e.message);
+  }
+}
+
+function renderOrderStats() {
+  const total     = allOrders.length;
+  const revenue   = allOrders.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
+  const delivered = allOrders.filter(o => o.status === 'delivered').length;
+  const pending   = allOrders.filter(o => o.status === 'processing').length;
+  document.getElementById('order-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Orders</div>
+      <div class="stat-value">${total}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Revenue (COD)</div>
+      <div class="stat-value" style="color:var(--coral)">₹${revenue.toLocaleString('en-IN')}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Delivered</div>
+      <div class="stat-value" style="color:var(--green)">${delivered}</div>
+      <div class="stat-sub">${total ? Math.round(delivered/total*100) : 0}% of total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Processing</div>
+      <div class="stat-value" style="color:var(--yellow)">${pending}</div>
+      <div class="stat-sub">Awaiting action</div>
+    </div>`;
+}
+
+function renderOrdersTable(orders) {
+  document.getElementById('order-count').textContent = `${orders.length} orders`;
+  if (!orders.length) {
+    document.getElementById('orders-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📦</div><div class="empty-txt">No orders found.</div></div>';
+    return;
+  }
+  document.getElementById('orders-wrap').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Mobile</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr></thead>
+        <tbody>
+          ${orders.map(o => `
+            <tr>
+              <td>
+                <span style="font-family:monospace;color:var(--coral);font-weight:800;font-size:0.82rem">${esc(o.order_id||'—')}</span>
+              </td>
+              <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
+              <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
+              <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
+              <td>
+                <select class="status-sel" onchange="updateOrderStatus(${o.id}, this.value, this)">
+                  ${STATUS_LIST.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
+                </select>
+              </td>
+              <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
+              <td style="white-space:nowrap">
+                <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.78rem;margin-right:6px" onclick="viewOrder(${o.id})">👁️ View</button>
+                <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function filterOrders() {
+  const q = document.getElementById('order-search').value.toLowerCase();
+  renderOrdersTable(q
+    ? allOrders.filter(o =>
+        (o.order_id||'').toLowerCase().includes(q) ||
+        (o.customer_name||'').toLowerCase().includes(q) ||
+        (o.mobile||'').includes(q) ||
+        (o.status||'').toLowerCase().includes(q))
+    : allOrders
+  );
+}
+
+async function updateOrderStatus(id, status, sel) {
+  sel.disabled = true;
+  try {
+    await sb(`orders?id=eq.${id}`, 'PATCH', { status });
+    const o = allOrders.find(x => x.id === id);
+    if (o) o.status = status;
+    renderOrderStats();
+    showToast(`✅ Updated to "${STATUS_LABELS[status]}"`);
+  } catch(e) {
+    showToast('⚠️ Failed to update status');
+  } finally {
+    sel.disabled = false;
+  }
+}
+
+function viewOrder(id) {
+  const o = allOrders.find(x => x.id === id); if (!o) return;
+  let items = [];
+  try { items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []); } catch(e) {}
+
+  document.getElementById('modal-body').innerHTML = `
+    <div class="drow"><div class="dkey">Order ID</div><div class="dval" style="color:var(--coral);font-weight:900;font-family:monospace">${esc(o.order_id)}</div></div>
+    <div class="drow"><div class="dkey">Customer</div><div class="dval" style="font-weight:700">${esc(o.customer_name||'—')}</div></div>
+    <div class="drow"><div class="dkey">Mobile</div><div class="dval" style="font-family:monospace">${esc(o.mobile||'—')}</div></div>
+    <div class="drow"><div class="dkey">Address</div><div class="dval">${esc(o.address||'—')}</div></div>
+    <div class="drow"><div class="dkey">Total</div><div class="dval" style="color:var(--green);font-weight:900">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</div></div>
+    <div class="drow"><div class="dkey">Payment</div><div class="dval">${esc(o.payment_method||'COD')}</div></div>
+    <div class="drow"><div class="dkey">Status</div><div class="dval"><span class="badge badge-${o.status||'processing'}">${STATUS_LABELS[o.status]||o.status}</span></div></div>
+    <div class="drow"><div class="dkey">Date</div><div class="dval">${fmtDate(o.created_at)}</div></div>
+    <div class="drow" style="flex-direction:column;gap:8px">
+      <div class="dkey" style="margin-bottom:4px">Items Ordered</div>
+      ${items.length
+        ? items.map(i => `
+            <div class="item-chip">
+              <span>${esc(i.name||'Unknown')} <span style="color:var(--muted)">× ${i.qty||1}</span></span>
+              <span class="item-chip-price">₹${((i.price||0)*(i.qty||1)).toLocaleString('en-IN')}</span>
+            </div>`).join('')
+        : '<div style="color:var(--muted);font-size:0.85rem">No item details</div>'}
+    </div>`;
+  document.getElementById('order-modal').classList.add('show');
+}
+
+async function deleteOrder(id, oid) {
+  if (!confirm(`Delete order "${oid}"?\n\nThis cannot be undone.`)) return;
+  try {
+    await sb(`orders?id=eq.${id}`, 'DELETE');
+    allOrders = allOrders.filter(o => o.id !== id);
+    renderOrderStats();
+    renderOrdersTable(allOrders);
+    showToast('🗑️ Order deleted');
+  } catch(e) { showToast('⚠️ Failed to delete: ' + e.message); }
+}
+
+function closeModal() { document.getElementById('order-modal').classList.remove('show'); }
+
+// ══════════════════════════════════════════════
+// ██ SESSIONS
+// ══════════════════════════════════════════════
+async function loadSessions() {
+  setLoading('sessions-wrap');
+  document.getElementById('session-stats').innerHTML = '';
+  try {
+    allSessions = await sb('session?select=*&order=date.desc');
+    renderSessionStats();
+    renderSessionGroups();
+  } catch(e) {
+    showErr('sessions-wrap', e.message);
+  }
+}
+
+function renderSessionStats() {
+  const total   = allSessions.length;
+  const carted  = allSessions.filter(s => s.added_cart).length;
+  const mobile  = allSessions.filter(s => s.device === 'Mobile').length;
+  const uniqueIPs = new Set(allSessions.map(s => s.ip_address || 'Unknown')).size;
+  const cvr     = total ? Math.round(carted / total * 100) : 0;
+
+  document.getElementById('session-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Sessions</div>
+      <div class="stat-value">${total}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Added to Cart</div>
+      <div class="stat-value" style="color:var(--coral)">${carted}</div>
+      <div class="stat-sub">${cvr}% conversion rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Unique IPs</div>
+      <div class="stat-value" style="color:var(--blue)">${uniqueIPs}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mobile Users</div>
+      <div class="stat-value" style="color:var(--green)">${mobile}</div>
+      <div class="stat-sub">${total ? Math.round(mobile/total*100) : 0}% of sessions</div>
+    </div>`;
+}
+
+function renderSessionGroups() {
+  if (!allSessions.length) {
+    document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No sessions recorded yet.</div></div>';
+    return;
+  }
+
+  // Group by IP address
+  const groups = {};
+  allSessions.forEach(s => {
+    const key = s.ip_address || 'Unknown';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+
+  // Sort groups: most sessions first
+  const sorted = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
+
+  document.getElementById('sessions-wrap').innerHTML = sorted.map(([ip, sessions]) => {
+    const safeId  = 'g_' + ip.replace(/[.\s]/g, '_');
+    const devices = [...new Set(sessions.map(s => s.device).filter(Boolean))];
+    const carted  = sessions.filter(s => s.added_cart).length;
+    const latest  = sessions[0]?.date;
+
+    return `
+      <div class="ip-group">
+        <div class="ip-group-hdr" onclick="toggleGroup('${safeId}')">
+          <div class="ip-left">
+            <span class="ip-address">${esc(ip)}</span>
+            <div class="ip-meta">
+              <span>🖥️ ${sessions.length} session${sessions.length !== 1 ? 's' : ''}</span>
+              ${devices.length ? `<span>📱 ${devices.join(', ')}</span>` : ''}
+              ${carted ? `<span style="color:var(--coral)">🛒 ${carted} added to cart</span>` : ''}
+              ${latest ? `<span>🕒 ${fmtDate(latest)}</span>` : ''}
+            </div>
+          </div>
+          <div class="ip-right">
+            <button class="btn btn-danger" style="padding:6px 12px;font-size:0.75rem"
+              onclick="event.stopPropagation();deleteIPGroup('${ip}')">
+              🗑️ Delete All
+            </button>
+            <span class="ip-chevron" id="chev-${safeId}">▼</span>
+          </div>
+        </div>
+        <div class="ip-sessions" id="${safeId}">
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Session ID</th>
+                <th>Device</th>
+                <th>Time Spent</th>
+                <th>Cart</th>
+                <th>Date</th>
+                <th>Delete</th>
+              </tr></thead>
+              <tbody>
+                ${sessions.map(s => {
+                  const dev = (s.device || 'unknown').toLowerCase();
+                  return `<tr>
+                    <td style="font-family:monospace;font-size:0.72rem;color:var(--muted)">
+                      ${(s.session_id || '—').toString().substring(0, 18)}…
+                    </td>
+                    <td><span class="badge badge-${dev}">${s.device || 'Unknown'}</span></td>
+                    <td style="color:var(--blue);font-weight:800">${s.time_spent || '0s'}</td>
+                    <td>${s.added_cart
+                      ? '<span style="color:var(--coral);font-weight:800">🛒 Yes</span>'
+                      : '<span style="color:var(--muted)">No</span>'}</td>
+                    <td style="color:var(--muted);font-size:0.75rem;white-space:nowrap">${s.date ? fmtDate(s.date) : '—'}</td>
+                    <td>
+                      <button class="btn btn-danger" style="padding:5px 10px;font-size:0.75rem"
+                        onclick="deleteOneSession(${s.id})">🗑️</button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleGroup(id) {
+  const el   = document.getElementById(id);
+  const chev = document.getElementById('chev-' + id);
+  el.classList.toggle('open');
+  if (chev) chev.classList.toggle('open');
+}
+
+async function deleteOneSession(id) {
+  try {
+    await sb(`session?id=eq.${id}`, 'DELETE');
+    allSessions = allSessions.filter(s => s.id !== id);
+    renderSessionStats();
+    renderSessionGroups();
+    showToast('🗑️ Session deleted');
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+async function deleteIPGroup(ip) {
+  const group = allSessions.filter(s => (s.ip_address || 'Unknown') === ip);
+  if (!confirm(`Delete all ${group.length} session(s) from ${ip}?`)) return;
+  try {
+    const ids = group.map(s => s.id).join(',');
+    await sb(`session?id=in.(${ids})`, 'DELETE');
+    allSessions = allSessions.filter(s => (s.ip_address || 'Unknown') !== ip);
+    renderSessionStats();
+    renderSessionGroups();
+    showToast(`🗑️ Deleted ${group.length} sessions from ${ip}`);
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+async function deleteAllSessions() {
+  if (!allSessions.length) { showToast('No sessions to delete'); return; }
+  if (!confirm(`Delete ALL ${allSessions.length} sessions?\n\nThis cannot be undone.`)) return;
+  try {
+    // Delete in batches using all IDs
+    const ids = allSessions.map(s => s.id).join(',');
+    await sb(`session?id=in.(${ids})`, 'DELETE');
+    allSessions = [];
+    renderSessionStats();
+    renderSessionGroups();
+    showToast('🗑️ All sessions deleted');
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════
+// ██ REVIEWS
+// ══════════════════════════════════════════════
+async function loadReviews() {
+  setLoading('reviews-wrap');
+  document.getElementById('review-count').textContent = '';
+  try {
+    allReviews = await sb('reviews?select=*&order=id.desc');
+    renderReviewsTable();
+  } catch(e) {
+    showErr('reviews-wrap', e.message);
+  }
+}
+
+function renderReviewsTable() {
+  document.getElementById('review-count').textContent = `${allReviews.length} reviews`;
+  if (!allReviews.length) {
+    document.getElementById('reviews-wrap').innerHTML = '<div class="empty"><div class="empty-ico">⭐</div><div class="empty-txt">No reviews yet. Add one above!</div></div>';
+    return;
+  }
+  document.getElementById('reviews-wrap').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Product</th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Review</th>
+          <th>Verified</th>
+          <th>Date</th>
+          <th>Delete</th>
+        </tr></thead>
+        <tbody>
+          ${allReviews.map(r => {
+            const pName = products.find(p => p.id === r.product_id)?.name || `Product #${r.product_id}`;
+            const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
+            return `<tr>
+              <td style="font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pName)}">${esc(pName)}</td>
+              <td style="font-weight:700;white-space:nowrap">${esc(r.name || '—')}</td>
+              <td>
+                <span style="color:var(--yellow);font-size:0.85rem">${stars}</span>
+                <span style="color:var(--muted);font-size:0.78rem;margin-left:4px">${r.rating}/5</span>
+              </td>
+              <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:0.83rem" title="${esc(r.text||'')}">
+                ${esc(r.text || '—')}
+              </td>
+              <td>${r.verified
+                ? '<span style="color:var(--green);font-weight:800">✅ Yes</span>'
+                : '<span style="color:var(--muted)">No</span>'}</td>
+              <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${r.created_at ? fmtDate(r.created_at) : '—'}</td>
+              <td>
+                <button class="btn btn-danger" style="padding:6px 12px;font-size:0.78rem"
+                  onclick="deleteReview(${r.id})">🗑️ Delete</button>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+async function addReview() {
+  const pid      = parseInt(document.getElementById('rv-product').value);
+  const name     = document.getElementById('rv-name').value.trim();
+  const rating   = parseInt(document.getElementById('rv-rating').value);
+  const text     = document.getElementById('rv-text').value.trim();
+  const verified = document.getElementById('rv-verified').checked;
+
+  if (!pid)  { showToast('⚠️ Select a product'); return; }
+  if (!name) { showToast('⚠️ Enter reviewer name'); return; }
+  if (!text) { showToast('⚠️ Enter review text'); return; }
+
+  try {
+    await sb('reviews', 'POST', { product_id: pid, name, rating, text, verified });
+    document.getElementById('rv-name').value  = '';
+    document.getElementById('rv-text').value  = '';
+    document.getElementById('rv-rating').value = '5';
+    document.getElementById('rv-verified').checked = true;
+    showToast('✅ Review added successfully!');
+    await loadReviews();
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+async function deleteReview(id) {
+  if (!confirm('Delete this review? This cannot be undone.')) return;
+  try {
+    await sb(`reviews?id=eq.${id}`, 'DELETE');
+    allReviews = allReviews.filter(r => r.id !== id);
+    renderReviewsTable();
+    showToast('🗑️ Review deleted');
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function setLoading(id) {
+  document.getElementById(id).innerHTML = '<div class="loader-wrap"><div class="spinner"></div>Loading…</div>';
+}
+function showErr(id, msg) {
+  document.getElementById(id).innerHTML = `<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">Error: ${esc(msg)}</div></div>`;
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+</script>
+</body>
+</html>
