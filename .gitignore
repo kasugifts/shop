@@ -1,0 +1,10 @@
+# Secret files - never commit these
+.env
+keys.env
+*.env
+
+# Dependencies
+node_modules/
+
+# System files
+.DS_Store
