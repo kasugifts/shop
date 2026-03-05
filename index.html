@@ -922,6 +922,17 @@ async function placeOrder(){
     console.warn('⚠️ Order save failed:', e.message);
   }
 
+  // ✅ Meta Pixel - Purchase Event
+  fbq('track', 'Purchase', {
+    value: total,
+    currency: 'INR',
+    content_ids: cart.map(c => String(c.product_id)),
+    content_type: 'product',
+    contents: cart.map(c => ({ id: String(c.product_id), quantity: c.qty, item_price: c.price })),
+    num_items: cart.reduce((a, c) => a + c.qty, 0),
+    order_id: orderId
+  });
+
   orderIds.push(orderId);
   store.set('kasu_orders',orderIds);
   cart=[]; saveCart(); updateBadge();
