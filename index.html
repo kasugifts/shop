@@ -922,8 +922,11 @@ async function placeOrder(){
     console.warn('⚠️ Order save failed:', e.message);
   }
 
- <script>
-  fbq('track', 'Purchase');
+<script>
+  fbq('track', 'Purchase', {
+    value: 699,
+    currency: 'INR',
+  });
 </script>
 
   orderIds.push(orderId);
