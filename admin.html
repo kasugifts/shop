@@ -28,17 +28,19 @@ src="https://www.facebook.com/tr?id=669618839569441&ev=PageView&noscript=1"
   --red: #e74c3c; --text: #e8eaf0; --muted: #7c8099; --radius: 10px;
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden;}
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 
 /* ── LOGIN ── */
-.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#1a1d27,#0f1117); }
+.login-screen { min-height:100vh; display:none; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#1a1d27,#0f1117); }
+.login-screen.show { display:flex; }
 .login-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:52px 44px; width:min(420px,90vw); text-align:center; animation:fadeUp 0.5s ease; }
 .login-logo { font-size:3.5rem; margin-bottom:18px; }
 .login-title { font-size:1.6rem; font-weight:900; margin-bottom:6px; }
-.login-sub { color:var(--muted); font-size:0.9rem; margin-bottom:36px; }
+.login-sub { color:var(--muted); font-size:0.9rem; margin-bottom:30px; }
 .login-input { width:100%; padding:15px 18px; background:var(--surface2); border:2px solid var(--border); border-radius:12px; color:var(--text); font-size:1rem; font-family:inherit; margin-bottom:14px; transition:border-color 0.2s; letter-spacing:2px; }
 .login-input:focus { outline:none; border-color:var(--coral); }
 .login-btn { width:100%; padding:15px; background:var(--coral); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:800; cursor:pointer; transition:all 0.2s; font-family:inherit; }
@@ -51,12 +53,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .admin-layout.show { display:flex; }
 
 /* ── SIDEBAR ── */
-.sidebar { width:250px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; height:100vh; z-index:100; }
+.sidebar { width:250px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; height:100vh; z-index:1000; transition:transform 0.3s cubic-bezier(0.16,1,0.3,1); }
 .sidebar-brand { padding:28px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
 .sidebar-logo { font-size:1.8rem; }
 .sidebar-name { font-size:1.05rem; font-weight:900; color:var(--coral); }
 .sidebar-sub { font-size:0.7rem; color:var(--muted); margin-top:2px; }
-.sidebar-nav { flex:1; padding:18px 12px; }
+.sidebar-nav { flex:1; padding:18px 12px; overflow-y:auto; }
 .nav-section { font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); padding:0 10px; margin:16px 0 8px; }
 .nav-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius); cursor:pointer; font-size:0.9rem; font-weight:700; color:var(--muted); transition:all 0.2s; margin-bottom:3px; border:none; background:none; width:100%; text-align:left; font-family:inherit; }
 .nav-item:hover { background:var(--surface2); color:var(--text); }
@@ -66,20 +68,29 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .logout-btn { width:100%; padding:10px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); border-radius:var(--radius); cursor:pointer; font-size:0.82rem; font-weight:700; font-family:inherit; transition:all 0.2s; }
 .logout-btn:hover { background:rgba(231,76,60,0.1); color:var(--red); border-color:rgba(231,76,60,0.3); }
 
+/* Sidebar Overlay for Mobile */
+.sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; display:none; backdrop-filter:blur(3px); animation:fadeIn 0.3s; }
+.sidebar-overlay.show { display:block; }
+
 /* ── MAIN ── */
-.admin-main { flex:1; margin-left:250px; min-height:100vh; display:flex; flex-direction:column; }
+.admin-main { flex:1; margin-left:250px; min-height:100vh; display:flex; flex-direction:column; width: calc(100% - 250px); }
 .tab-content { display:none; flex:1; flex-direction:column; }
-.tab-content.active { display:flex; }
+.tab-content.active { display:flex; animation:fadeIn 0.3s; }
 
 /* ── TOP BAR ── */
-.top-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50; }
+.top-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; position:sticky; top:0; z-index:50; }
+.top-bar-left { display:flex; align-items:center; gap:16px; }
 .top-bar-left h2 { font-size:1.15rem; font-weight:900; }
 .top-bar-left p { font-size:0.78rem; color:var(--muted); margin-top:2px; }
 .top-bar-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .tab-body { padding:28px 32px; flex:1; }
 
+/* Mobile Menu Toggle */
+.mobile-toggle { display:none; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:1.2rem; cursor:pointer; padding:6px 12px; transition:all 0.2s; }
+.mobile-toggle:hover { background:var(--border); }
+
 /* ── BUTTONS ── */
-.btn { padding:9px 18px; border-radius:8px; font-size:0.82rem; font-weight:800; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; display:inline-flex; align-items:center; gap:6px; }
+.btn { padding:9px 18px; border-radius:8px; font-size:0.82rem; font-weight:800; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
 .btn:active { transform:scale(0.97); }
 .btn-primary { background:var(--coral); color:white; }
 .btn-primary:hover { background:#c45f4a; }
@@ -101,8 +112,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .table-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
 .table-card-hdr { padding:16px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .table-card-title { font-size:0.95rem; font-weight:800; }
-.table-wrap { overflow-x:auto; }
-table { width:100%; border-collapse:collapse; }
+.table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table { width:100%; border-collapse:collapse; min-width:800px; }
 th { padding:11px 16px; text-align:left; font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:800; border-bottom:1px solid var(--border); white-space:nowrap; background:var(--surface2); }
 td { padding:13px 16px; font-size:0.87rem; border-bottom:1px solid rgba(42,45,62,0.5); vertical-align:middle; }
 tr:last-child td { border-bottom:none; }
@@ -126,11 +137,11 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .status-sel:focus { outline:none; border-color:var(--coral); }
 
 /* ── SEARCH ── */
-.search-box { padding:9px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.85rem; font-family:inherit; min-width:200px; }
+.search-box { padding:9px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.85rem; font-family:inherit; min-width:200px; flex:1; }
 .search-box:focus { outline:none; border-color:var(--coral); }
 .search-box::placeholder { color:var(--muted); }
 
-/* ── IP GROUPS ── */
+/* ── IP / ARCHIVE GROUPS ── */
 .ip-group { border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; }
 .ip-group-hdr { padding:14px 20px; background:var(--surface); display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:12px; transition:background 0.2s; }
 .ip-group-hdr:hover { background:var(--surface2); }
@@ -143,6 +154,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .ip-chevron.open { transform:rotate(180deg); }
 .ip-sessions { display:none; border-top:1px solid var(--border); }
 .ip-sessions.open { display:block; }
+
+.archived-body { display: none; }
+.archived-body.open { display: block; border-top: 1px solid var(--border); }
 
 /* ── REVIEW FORM ── */
 .form-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px; }
@@ -165,9 +179,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .loader-wrap { text-align:center; padding:40px; color:var(--muted); font-size:0.88rem; }
 
 /* ── MODAL ── */
-.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px); }
-.modal-bg.show { display:flex; }
-.modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:min(580px,100%); max-height:85vh; display:flex; flex-direction:column; }
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px); }
+.modal-bg.show { display:flex; animation:fadeIn 0.2s; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:min(580px,100%); max-height:85vh; display:flex; flex-direction:column; animation:fadeUp 0.3s ease; }
 .modal-hdr { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
 .modal-title { font-size:1rem; font-weight:900; }
 .modal-x { background:var(--surface2); border:1px solid var(--border); color:var(--muted); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
@@ -184,13 +198,20 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .toast { position:fixed; bottom:24px; right:24px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:13px 20px; border-radius:10px; font-size:0.85rem; font-weight:700; z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:320px; }
 .toast.show { transform:translateY(0); opacity:1; }
 
-@media(max-width:768px){
-  .sidebar { transform:translateX(-100%); transition:transform 0.3s; }
+@media(max-width:900px){
+  .sidebar { transform:translateX(-100%); }
   .sidebar.open { transform:translateX(0); }
-  .admin-main { margin-left:0; }
-  .tab-body { padding:16px; }
+  .admin-main { margin-left:0; width:100%; }
+  .mobile-toggle { display:block; }
+  .top-bar { padding: 16px 20px; }
+  .tab-body { padding:20px; }
+}
+
+@media(max-width:600px){
   .fgrid { grid-template-columns:1fr; }
   .stats-grid { grid-template-columns:1fr 1fr; }
+  .top-bar-right { width:100%; }
+  .top-bar-right .search-box { width: 100%; min-width: auto; }
 }
 </style>
 </head>
@@ -204,6 +225,12 @@ tr:hover td { background:rgba(255,255,255,0.02); }
     <div class="login-sub">Restricted access — authorized personnel only</div>
     <input class="login-input" id="pw-input" type="password" placeholder="Enter password"
       onkeydown="if(event.key==='Enter')tryLogin()">
+    
+    <div class="check-row" style="margin-bottom: 24px; justify-content: center;">
+      <input type="checkbox" id="remember-me">
+      <label for="remember-me" style="color: var(--muted); font-size: 0.85rem;">Remember me on this device</label>
+    </div>
+
     <button class="login-btn" onclick="tryLogin()">Sign In →</button>
     <div class="login-err" id="login-err">❌ Incorrect password. Try again.</div>
   </div>
@@ -211,6 +238,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 
 <!-- ══ ADMIN ══ -->
 <div class="admin-layout" id="admin-layout">
+
+  <!-- SIDEBAR OVERLAY (Mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
@@ -245,23 +275,45 @@ tr:hover td { background:rgba(255,255,255,0.02); }
     <div id="tab-orders" class="tab-content active">
       <div class="top-bar">
         <div class="top-bar-left">
-          <h2>📦 Orders</h2>
-          <p>View, edit and manage all customer orders</p>
+          <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+          <div>
+            <h2>📦 Orders</h2>
+            <p>View, edit, archive and manage all customer orders</p>
+          </div>
         </div>
         <div class="top-bar-right">
-          <input class="search-box" id="order-search" placeholder="🔍 Search by ID, name, status…" oninput="filterOrders()">
+          <input class="search-box" id="order-search" placeholder="🔍 Search ID, Name, IP, Status..." oninput="filterOrders()">
           <button class="btn btn-ghost" onclick="loadOrders()">↻ Refresh</button>
         </div>
       </div>
       <div class="tab-body">
         <div class="stats-grid" id="order-stats"></div>
+        
+        <!-- Active Orders -->
         <div class="table-card">
           <div class="table-card-hdr">
-            <div class="table-card-title">All Orders</div>
-            <div id="order-count" style="font-size:0.8rem;color:var(--muted)"></div>
+            <div class="table-card-title">Active Orders</div>
+            <div id="active-order-count" style="font-size:0.8rem;color:var(--muted)"></div>
           </div>
-          <div id="orders-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
+          <div id="active-orders-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
         </div>
+
+        <!-- Archived Orders -->
+        <div class="table-card" style="margin-top: 24px;">
+          <div class="table-card-hdr" style="cursor:pointer" onclick="toggleArchiveSection()">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="table-card-title">Archived Orders</div>
+              <div id="archived-order-count" style="font-size:0.8rem;color:var(--muted)"></div>
+            </div>
+            <div class="ip-chevron" id="archived-chevron">▼</div>
+          </div>
+          <div class="archived-body" id="archived-orders-body">
+            <div id="archived-orders-wrap">
+              <div class="empty"><div class="empty-ico">🗃️</div><div class="empty-txt">No archived orders.</div></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -269,10 +321,14 @@ tr:hover td { background:rgba(255,255,255,0.02); }
     <div id="tab-sessions" class="tab-content">
       <div class="top-bar">
         <div class="top-bar-left">
-          <h2>📊 Sessions</h2>
-          <p>User sessions grouped by IP address</p>
+          <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+          <div>
+            <h2>📊 Sessions</h2>
+            <p>User sessions grouped by IP address</p>
+          </div>
         </div>
         <div class="top-bar-right">
+          <input class="search-box" id="session-search" placeholder="🔍 Search IP, Device, ID..." oninput="filterSessions()">
           <button class="btn btn-danger" onclick="deleteAllSessions()">🗑️ Delete All</button>
           <button class="btn btn-ghost" onclick="loadSessions()">↻ Refresh</button>
         </div>
@@ -287,8 +343,11 @@ tr:hover td { background:rgba(255,255,255,0.02); }
     <div id="tab-reviews" class="tab-content">
       <div class="top-bar">
         <div class="top-bar-left">
-          <h2>⭐ Reviews</h2>
-          <p>Add and remove product reviews</p>
+          <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+          <div>
+            <h2>⭐ Reviews</h2>
+            <p>Add and remove product reviews</p>
+          </div>
         </div>
         <div class="top-bar-right">
           <button class="btn btn-ghost" onclick="loadReviews()">↻ Refresh</button>
@@ -379,13 +438,36 @@ let products    = [];
 // ══════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════
-function tryLogin() {
-  const pw  = document.getElementById('pw-input').value;
-  const err = document.getElementById('login-err');
-  if (pw === PASS) {
-    document.getElementById('login-screen').style.display = 'none';
+// Check auth immediately to prevent blinking
+checkAuth();
+
+function checkAuth() {
+  const isAuth = localStorage.getItem('kasu_admin_auth') === 'true' || sessionStorage.getItem('kasu_admin_auth') === 'true';
+  
+  if (isAuth) {
+    document.getElementById('login-screen').classList.remove('show');
     document.getElementById('admin-layout').classList.add('show');
+    // Initialize data ONLY if we are authenticated
     initAdmin();
+  } else {
+    document.getElementById('admin-layout').classList.remove('show');
+    document.getElementById('login-screen').classList.add('show');
+  }
+}
+
+function tryLogin() {
+  const pw = document.getElementById('pw-input').value;
+  const err = document.getElementById('login-err');
+  const remember = document.getElementById('remember-me').checked;
+  
+  if (pw === PASS) {
+    if (remember) {
+      localStorage.setItem('kasu_admin_auth', 'true');
+    } else {
+      sessionStorage.setItem('kasu_admin_auth', 'true');
+    }
+    document.getElementById('pw-input').value = '';
+    checkAuth();
   } else {
     err.classList.add('show');
     document.getElementById('pw-input').value = '';
@@ -395,9 +477,25 @@ function tryLogin() {
 }
 
 function logout() {
-  document.getElementById('admin-layout').classList.remove('show');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pw-input').value = '';
+  localStorage.removeItem('kasu_admin_auth');
+  sessionStorage.removeItem('kasu_admin_auth');
+  checkAuth();
+}
+
+// ══════════════════════════════════════════════
+// MOBILE SIDEBAR TOGGLE
+// ══════════════════════════════════════════════
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+}
+function toggleArchiveSection() {
+  document.getElementById('archived-orders-body').classList.toggle('open');
+  document.getElementById('archived-chevron').classList.toggle('open');
 }
 
 // ══════════════════════════════════════════════
@@ -444,6 +542,7 @@ async function initAdmin() {
 // TAB SWITCHING
 // ══════════════════════════════════════════════
 function switchTab(name, btn) {
+  closeSidebar(); // Close sidebar on mobile after clicking
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
@@ -463,26 +562,31 @@ const STATUS_LABELS = {
 };
 
 async function loadOrders() {
-  setLoading('orders-wrap');
+  setLoading('active-orders-wrap');
   document.getElementById('order-stats').innerHTML = '';
-  document.getElementById('order-count').textContent = '';
+  document.getElementById('active-order-count').textContent = '';
+  document.getElementById('archived-order-count').textContent = '';
   try {
     allOrders = await sb('orders?select=*&order=created_at.desc');
     renderOrderStats();
-    renderOrdersTable(allOrders);
+    renderOrderTables();
   } catch(e) {
-    showErr('orders-wrap', e.message);
+    showErr('active-orders-wrap', e.message);
   }
 }
 
 function renderOrderStats() {
-  const total     = allOrders.length;
-  const revenue   = allOrders.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
-  const delivered = allOrders.filter(o => o.status === 'delivered').length;
-  const pending   = allOrders.filter(o => o.status === 'processing').length;
+  // Only include active orders for stats
+  const activeOrders = allOrders.filter(o => !o.is_archived);
+
+  const total     = activeOrders.length;
+  const revenue   = activeOrders.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
+  const delivered = activeOrders.filter(o => o.status === 'delivered').length;
+  const pending   = activeOrders.filter(o => o.status === 'processing').length;
+
   document.getElementById('order-stats').innerHTML = `
     <div class="stat-card">
-      <div class="stat-label">Total Orders</div>
+      <div class="stat-label">Active Orders</div>
       <div class="stat-value">${total}</div>
     </div>
     <div class="stat-card">
@@ -492,7 +596,7 @@ function renderOrderStats() {
     <div class="stat-card">
       <div class="stat-label">Delivered</div>
       <div class="stat-value" style="color:var(--green)">${delivered}</div>
-      <div class="stat-sub">${total ? Math.round(delivered/total*100) : 0}% of total</div>
+      <div class="stat-sub">${total ? Math.round(delivered/total*100) : 0}% of active</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Processing</div>
@@ -501,13 +605,36 @@ function renderOrderStats() {
     </div>`;
 }
 
-function renderOrdersTable(orders) {
-  document.getElementById('order-count').textContent = `${orders.length} orders`;
+function filterOrders() {
+  const q = document.getElementById('order-search').value.toLowerCase();
+  const filtered = q
+    ? allOrders.filter(o =>
+        (o.order_id||'').toLowerCase().includes(q) ||
+        (o.customer_name||'').toLowerCase().includes(q) ||
+        (o.mobile||'').includes(q) ||
+        (o.ip_address||'').toLowerCase().includes(q) ||
+        (o.status||'').toLowerCase().includes(q))
+    : allOrders;
+  renderOrderTables(filtered);
+}
+
+function renderOrderTables(filtered = null) {
+  const data = filtered || allOrders;
+  const activeOrders = data.filter(o => !o.is_archived);
+  const archivedOrders = data.filter(o => o.is_archived);
+  
+  document.getElementById('active-order-count').textContent = `${activeOrders.length} active`;
+  document.getElementById('archived-order-count').textContent = `${archivedOrders.length} archived`;
+  
+  document.getElementById('active-orders-wrap').innerHTML = buildOrdersHTML(activeOrders, false);
+  document.getElementById('archived-orders-wrap').innerHTML = buildOrdersHTML(archivedOrders, true);
+}
+
+function buildOrdersHTML(orders, isArchived) {
   if (!orders.length) {
-    document.getElementById('orders-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📦</div><div class="empty-txt">No orders found.</div></div>';
-    return;
+    return `<div class="empty"><div class="empty-ico">${isArchived ? '🗃️' : '📦'}</div><div class="empty-txt">No ${isArchived ? 'archived' : 'active'} orders found.</div></div>`;
   }
-  document.getElementById('orders-wrap').innerHTML = `
+  return `
     <div class="table-wrap">
       <table>
         <thead><tr>
@@ -515,6 +642,7 @@ function renderOrdersTable(orders) {
           <th>Customer</th>
           <th>Mobile</th>
           <th>Total</th>
+          <th>IP Address</th>
           <th>Status</th>
           <th>Date</th>
           <th>Actions</th>
@@ -528,6 +656,7 @@ function renderOrdersTable(orders) {
               <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
               <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
               <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
+              <td style="font-family:monospace;color:var(--muted);font-size:0.8rem">${esc(o.ip_address||'—')}</td>
               <td>
                 <select class="status-sel" onchange="updateOrderStatus(${o.id}, this.value, this)">
                   ${STATUS_LIST.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
@@ -535,25 +664,17 @@ function renderOrdersTable(orders) {
               </td>
               <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
               <td style="white-space:nowrap">
-                <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.78rem;margin-right:6px" onclick="viewOrder(${o.id})">👁️ View</button>
+                <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="viewOrder(${o.id})">👁️ View</button>
+                ${isArchived 
+                  ? `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="toggleArchiveOrder(${o.id}, false)">📤 Unarchive</button>`
+                  : `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="toggleArchiveOrder(${o.id}, true)">🗃️ Archive</button>`
+                }
                 <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
               </td>
             </tr>`).join('')}
         </tbody>
       </table>
     </div>`;
-}
-
-function filterOrders() {
-  const q = document.getElementById('order-search').value.toLowerCase();
-  renderOrdersTable(q
-    ? allOrders.filter(o =>
-        (o.order_id||'').toLowerCase().includes(q) ||
-        (o.customer_name||'').toLowerCase().includes(q) ||
-        (o.mobile||'').includes(q) ||
-        (o.status||'').toLowerCase().includes(q))
-    : allOrders
-  );
 }
 
 async function updateOrderStatus(id, status, sel) {
@@ -571,6 +692,29 @@ async function updateOrderStatus(id, status, sel) {
   }
 }
 
+async function toggleArchiveOrder(id, archive) {
+  try {
+    await sb(`orders?id=eq.${id}`, 'PATCH', { is_archived: archive });
+    const o = allOrders.find(x => x.id === id);
+    if (o) o.is_archived = archive;
+    
+    // Automatically open the archive panel if we archive something and it's closed
+    if (archive && !document.getElementById('archived-orders-body').classList.contains('open')) {
+      toggleArchiveSection();
+    }
+    
+    // Update stats immediately
+    renderOrderStats();
+    // Re-render tables with current search applied
+    filterOrders(); 
+    
+    showToast(archive ? '🗃️ Order archived' : '📤 Order unarchived');
+  } catch(e) {
+    showToast('⚠️ Failed! Make sure you added the "is_archived" boolean column in Supabase.');
+    console.error(e);
+  }
+}
+
 function viewOrder(id) {
   const o = allOrders.find(x => x.id === id); if (!o) return;
   let items = [];
@@ -582,8 +726,10 @@ function viewOrder(id) {
     <div class="drow"><div class="dkey">Mobile</div><div class="dval" style="font-family:monospace">${esc(o.mobile||'—')}</div></div>
     <div class="drow"><div class="dkey">Address</div><div class="dval">${esc(o.address||'—')}</div></div>
     <div class="drow"><div class="dkey">Total</div><div class="dval" style="color:var(--green);font-weight:900">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</div></div>
+    <div class="drow"><div class="dkey">IP Address</div><div class="dval" style="font-family:monospace;color:var(--blue)">${esc(o.ip_address||'—')}</div></div>
     <div class="drow"><div class="dkey">Payment</div><div class="dval">${esc(o.payment_method||'COD')}</div></div>
     <div class="drow"><div class="dkey">Status</div><div class="dval"><span class="badge badge-${o.status||'processing'}">${STATUS_LABELS[o.status]||o.status}</span></div></div>
+    <div class="drow"><div class="dkey">Archive Status</div><div class="dval">${o.is_archived ? '<span style="color:var(--muted)">🗃️ Archived</span>' : '<span style="color:var(--green)">📦 Active</span>'}</div></div>
     <div class="drow"><div class="dkey">Date</div><div class="dval">${fmtDate(o.created_at)}</div></div>
     <div class="drow" style="flex-direction:column;gap:8px">
       <div class="dkey" style="margin-bottom:4px">Items Ordered</div>
@@ -604,7 +750,7 @@ async function deleteOrder(id, oid) {
     await sb(`orders?id=eq.${id}`, 'DELETE');
     allOrders = allOrders.filter(o => o.id !== id);
     renderOrderStats();
-    renderOrdersTable(allOrders);
+    filterOrders();
     showToast('🗑️ Order deleted');
   } catch(e) { showToast('⚠️ Failed to delete: ' + e.message); }
 }
@@ -620,10 +766,22 @@ async function loadSessions() {
   try {
     allSessions = await sb('session?select=*&order=date.desc');
     renderSessionStats();
-    renderSessionGroups();
+    renderSessionGroups(allSessions);
   } catch(e) {
     showErr('sessions-wrap', e.message);
   }
+}
+
+function filterSessions() {
+  const q = document.getElementById('session-search').value.toLowerCase();
+  const filtered = q 
+    ? allSessions.filter(s => 
+        (s.ip_address || '').toLowerCase().includes(q) ||
+        (s.device || '').toLowerCase().includes(q) ||
+        (s.session_id || '').toLowerCase().includes(q)
+      )
+    : allSessions;
+  renderSessionGroups(filtered);
 }
 
 function renderSessionStats() {
@@ -654,15 +812,15 @@ function renderSessionStats() {
     </div>`;
 }
 
-function renderSessionGroups() {
-  if (!allSessions.length) {
-    document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No sessions recorded yet.</div></div>';
+function renderSessionGroups(sessionsToRender) {
+  if (!sessionsToRender.length) {
+    document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No matching sessions found.</div></div>';
     return;
   }
 
   // Group by IP address
   const groups = {};
-  allSessions.forEach(s => {
+  sessionsToRender.forEach(s => {
     const key = s.ip_address || 'Unknown';
     if (!groups[key]) groups[key] = [];
     groups[key].push(s);
@@ -747,7 +905,7 @@ async function deleteOneSession(id) {
     await sb(`session?id=eq.${id}`, 'DELETE');
     allSessions = allSessions.filter(s => s.id !== id);
     renderSessionStats();
-    renderSessionGroups();
+    filterSessions(); // Keeps search filter applied
     showToast('🗑️ Session deleted');
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -760,7 +918,7 @@ async function deleteIPGroup(ip) {
     await sb(`session?id=in.(${ids})`, 'DELETE');
     allSessions = allSessions.filter(s => (s.ip_address || 'Unknown') !== ip);
     renderSessionStats();
-    renderSessionGroups();
+    filterSessions(); // Keeps search filter applied
     showToast(`🗑️ Deleted ${group.length} sessions from ${ip}`);
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -773,8 +931,9 @@ async function deleteAllSessions() {
     const ids = allSessions.map(s => s.id).join(',');
     await sb(`session?id=in.(${ids})`, 'DELETE');
     allSessions = [];
+    document.getElementById('session-search').value = '';
     renderSessionStats();
-    renderSessionGroups();
+    renderSessionGroups([]);
     showToast('🗑️ All sessions deleted');
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -818,7 +977,7 @@ function renderReviewsTable() {
             return `<tr>
               <td style="font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pName)}">${esc(pName)}</td>
               <td style="font-weight:700;white-space:nowrap">${esc(r.name || '—')}</td>
-              <td>
+              <td style="white-space:nowrap">
                 <span style="color:var(--yellow);font-size:0.85rem">${stars}</span>
                 <span style="color:var(--muted);font-size:0.78rem;margin-left:4px">${r.rating}/5</span>
               </td>
