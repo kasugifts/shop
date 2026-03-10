@@ -1049,7 +1049,7 @@
       const price      = variant ? variant.price : p.price;
       const variantKey = variant ? `${pid}_${variant.label}` : `${pid}`;
 
-      const ex = cart.find(c => c.cart_key === variantKey);
+      const ex = cart.find(c => String(c.cart_key) === String(variantKey));
       if (ex) {
         ex.qty++;
       } else {
@@ -1068,13 +1068,13 @@
     }
 
     function incCart(cartKey) {
-      const item = cart.find(c => c.cart_key === cartKey); if (!item) return;
+      const item = cart.find(c => String(c.cart_key) === String(cartKey)); if (!item) return;
       item.qty++; saveCart(); updateBadge(); renderCart();
     }
     function decCart(cartKey) {
-      const item = cart.find(c => c.cart_key === cartKey); if (!item) return;
+      const item = cart.find(c => String(c.cart_key) === String(cartKey)); if (!item) return;
       item.qty--;
-      if (item.qty <= 0) cart = cart.filter(c => c.cart_key !== cartKey);
+      if (item.qty <= 0) cart = cart.filter(c => String(c.cart_key) !== String(cartKey));
       saveCart(); updateBadge(); renderCart();
     }
     function updateBadge() { document.getElementById('cart-count').textContent = cart.reduce((a, c) => a + c.qty, 0); }
@@ -1119,9 +1119,9 @@
             <div class="ci-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
           </div>
           <div class="ci-qty-ctrl">
-            <button class="qty-btn minus" onclick="decCart('${item.cart_key}')">−</button>
+            <button class="qty-btn minus" onclick="decCart('${String(item.cart_key).replace(/'/g, "\\'")}')">−</button>
             <span class="qty-num">${item.qty}</span>
-            <button class="qty-btn" onclick="incCart('${item.cart_key}')">+</button>
+            <button class="qty-btn" onclick="incCart('${String(item.cart_key).replace(/'/g, "\\'")}')">+</button>
           </div>
         </div>`).join('');
       document.getElementById('cart-total-val').textContent = `₹${total.toLocaleString('en-IN')}`;

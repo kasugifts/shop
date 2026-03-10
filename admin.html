@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '669618839569441');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=669618839569441&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kasu Admin Panel</title>
@@ -28,7 +11,7 @@ src="https://www.facebook.com/tr?id=669618839569441&ev=PageView&noscript=1"
   --red: #e74c3c; --text: #e8eaf0; --muted: #7c8099; --radius: 10px;
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden;}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
@@ -77,8 +60,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .admin-main { flex:1; margin-left:250px; min-height:100vh; display:flex; flex-direction:column; width: calc(100% - 250px); }
 .tab-content { display:none; flex:1; flex-direction:column; }
 .tab-content.active { display:flex; animation:fadeIn 0.3s; }
-
-/* ── TOP BAR ── */
 .top-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; position:sticky; top:0; z-index:50; }
 .top-bar-left { display:flex; align-items:center; gap:16px; }
 .top-bar-left h2 { font-size:1.15rem; font-weight:900; }
@@ -89,7 +70,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .mobile-toggle { display:none; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:1.2rem; cursor:pointer; padding:6px 12px; transition:all 0.2s; }
 .mobile-toggle:hover { background:var(--border); }
 
-/* ── BUTTONS ── */
+/* ── BUTTONS & UI ── */
 .btn { padding:9px 18px; border-radius:8px; font-size:0.82rem; font-weight:800; cursor:pointer; transition:all 0.2s; border:none; font-family:inherit; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
 .btn:active { transform:scale(0.97); }
 .btn-primary { background:var(--coral); color:white; }
@@ -103,14 +84,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .btn-warning { background:rgba(247,183,49,0.1); color:var(--yellow); border:1px solid rgba(247,183,49,0.25); }
 .btn-warning:hover { background:rgba(247,183,49,0.2); }
 
-/* ── STATS ── */
 .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:16px; margin-bottom:28px; }
 .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
 .stat-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:800; margin-bottom:8px; }
 .stat-value { font-size:2.2rem; font-weight:900; line-height:1; }
 .stat-sub { font-size:0.75rem; color:var(--muted); margin-top:6px; }
 
-/* ── TABLE CARD ── */
 .table-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
 .table-card-hdr { padding:16px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .table-card-title { font-size:0.95rem; font-weight:800; }
@@ -121,7 +100,6 @@ td { padding:13px 16px; font-size:0.87rem; border-bottom:1px solid rgba(42,45,62
 tr:last-child td { border-bottom:none; }
 tr:hover td { background:rgba(255,255,255,0.02); }
 
-/* ── BADGES ── */
 .badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:0.7rem; font-weight:800; white-space:nowrap; }
 .badge-processing { background:rgba(247,183,49,0.12); color:var(--yellow); }
 .badge-confirmed { background:rgba(74,158,255,0.12); color:var(--blue); }
@@ -139,16 +117,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .badge-percent { background:rgba(74,158,255,0.12); color:var(--blue); }
 .badge-expired { background:rgba(231,76,60,0.12); color:var(--red); }
 
-/* ── STATUS SELECT ── */
 .status-sel { background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; font-size:0.8rem; font-family:inherit; cursor:pointer; }
-.status-sel:focus { outline:none; border-color:var(--coral); }
-
-/* ── SEARCH ── */
 .search-box { padding:9px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.85rem; font-family:inherit; min-width:200px; flex:1; }
-.search-box:focus { outline:none; border-color:var(--coral); }
-.search-box::placeholder { color:var(--muted); }
 
-/* ── IP / ARCHIVE GROUPS ── */
 .ip-group { border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; }
 .ip-group-hdr { padding:14px 20px; background:var(--surface); display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:12px; transition:background 0.2s; }
 .ip-group-hdr:hover { background:var(--surface2); }
@@ -161,7 +132,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .ip-chevron.open { transform:rotate(180deg); }
 .ip-sessions { display:none; border-top:1px solid var(--border); }
 .ip-sessions.open { display:block; }
-
 .archived-body { display: none; }
 .archived-body.open { display: block; border-top: 1px solid var(--border); }
 
@@ -180,14 +150,28 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .check-row label { font-size:0.85rem; font-weight:700; cursor:pointer; margin:0; }
 .fg-hint { font-size:0.72rem; color:var(--muted); margin-top:5px; }
 
-/* ── COUPON TOGGLE PILL ── */
+/* ── IMAGE UPLOAD UI ── */
+.img-upload-wrap { border:2px dashed var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.25s; }
+.img-upload-wrap:hover { border-color:rgba(218,110,89,0.4); }
+.img-upload-drop { padding:28px 20px; text-align:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; transition:background 0.2s; }
+.img-upload-drop:hover { background:rgba(218,110,89,0.04); }
+.img-upload-icon { font-size:2rem; }
+.img-upload-label { font-size:0.9rem; font-weight:800; color:var(--text); }
+.img-upload-hint { font-size:0.72rem; color:var(--muted); }
+.img-preview-wrap { padding:14px 16px; display:flex; align-items:center; gap:16px; background:rgba(255,255,255,0.03); }
+.img-preview-thumb { width:80px; height:80px; border-radius:8px; object-fit:cover; border:1px solid var(--border); flex-shrink:0; background:var(--surface2); }
+.img-preview-info { flex:1; min-width:0; }
+.img-preview-name { font-size:0.85rem; font-weight:800; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.img-preview-size { font-size:0.72rem; color:var(--muted); margin-bottom:8px; }
+.img-preview-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.url-alt-row { display:flex; align-items:center; gap:10px; padding:10px 14px; border-top:1px solid var(--border); background:rgba(255,255,255,0.01); }
+.url-alt-label { font-size:0.7rem; color:var(--muted); font-weight:800; white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; }
+.url-alt-input { flex:1; padding:8px 10px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:0.82rem; font-family:inherit; transition:border-color 0.2s; }
+
 .toggle-pill { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800; cursor:pointer; border:none; font-family:inherit; transition:all 0.2s; }
 .toggle-pill.on  { background:rgba(76,175,118,0.15); color:var(--green); border:1px solid rgba(76,175,118,0.3); }
-.toggle-pill.on:hover  { background:rgba(76,175,118,0.25); }
 .toggle-pill.off { background:rgba(124,128,153,0.12); color:var(--muted); border:1px solid rgba(124,128,153,0.2); }
-.toggle-pill.off:hover { background:rgba(124,128,153,0.2); }
 
-/* ── EMPTY / LOADER ── */
 .empty { padding:60px; text-align:center; }
 .empty-ico { font-size:3rem; margin-bottom:12px; }
 .empty-txt { color:var(--muted); font-size:0.9rem; }
@@ -197,7 +181,7 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 /* ── MODAL ── */
 .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px); }
 .modal-bg.show { display:flex; animation:fadeIn 0.2s; }
-.modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:min(580px,100%); max-height:85vh; display:flex; flex-direction:column; animation:fadeUp 0.3s ease; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:min(580px,100%); max-height:88vh; display:flex; flex-direction:column; animation:fadeUp 0.3s ease; }
 .modal-hdr { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
 .modal-title { font-size:1rem; font-weight:900; }
 .modal-x { background:var(--surface2); border:1px solid var(--border); color:var(--muted); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
@@ -210,10 +194,8 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .item-chip { background:var(--surface2); border:1px solid var(--border); padding:8px 14px; border-radius:8px; font-size:0.83rem; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
 .item-chip-price { color:var(--coral); font-weight:900; }
 
-/* ── EDIT COUPON MODAL ── */
-.edit-modal { width:min(640px,100%); }
+.edit-modal { width:min(660px,100%); }
 
-/* ── TOAST ── */
 .toast { position:fixed; bottom:24px; right:24px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:13px 20px; border-radius:10px; font-size:0.85rem; font-weight:700; z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:320px; }
 .toast.show { transform:translateY(0); opacity:1; }
 
@@ -225,12 +207,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
   .top-bar { padding: 16px 20px; }
   .tab-body { padding:20px; }
 }
-
 @media(max-width:600px){
   .fgrid, .fgrid-3 { grid-template-columns:1fr; }
   .stats-grid { grid-template-columns:1fr 1fr; }
-  .top-bar-right { width:100%; }
-  .top-bar-right .search-box { width: 100%; min-width: auto; }
 }
 </style>
 </head>
@@ -363,7 +342,7 @@ tr:hover td { background:rgba(255,255,255,0.02); }
           <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
           <div>
             <h2>⭐ Reviews</h2>
-            <p>Add and remove product reviews</p>
+            <p>Add, edit, and remove product reviews</p>
           </div>
         </div>
         <div class="top-bar-right">
@@ -371,12 +350,14 @@ tr:hover td { background:rgba(255,255,255,0.02); }
         </div>
       </div>
       <div class="tab-body">
+        
+        <!-- Add Review Form -->
         <div class="form-card">
           <h3>➕ Add New Review</h3>
           <div class="fgrid">
             <div class="fg">
               <label>Product *</label>
-              <select id="rv-product"><option value="">Loading products…</option></select>
+              <select id="rv-product"><option value="">Loading…</option></select>
             </div>
             <div class="fg">
               <label>Reviewer Name *</label>
@@ -394,19 +375,55 @@ tr:hover td { background:rgba(255,255,255,0.02); }
                 <option value="1">⭐ — Terrible (1)</option>
               </select>
             </div>
-            <div class="fg" style="display:flex;align-items:flex-end;">
-              <div class="check-row">
-                <input type="checkbox" id="rv-verified" checked>
-                <label for="rv-verified">Mark as Verified Purchase</label>
-              </div>
+            <div class="fg">
+              <label>Review Date &amp; Time</label>
+              <input id="rv-date" type="datetime-local">
+              <div class="fg-hint">Controls when this review appears to have been posted</div>
             </div>
           </div>
           <div class="fg">
             <label>Review Text *</label>
             <textarea id="rv-text" rows="3" placeholder="Write the review content here…"></textarea>
           </div>
-          <button class="btn btn-primary" onclick="addReview()">✨ Add Review</button>
+          
+          <!-- IMAGE UPLOAD: ADD MODE -->
+          <div class="fg">
+            <label>Review Photo (Optional — verified badge recommended)</label>
+            <div class="img-upload-wrap">
+              <div class="img-upload-drop" id="add-upload-drop" onclick="document.getElementById('add-img-file').click()">
+                <div class="img-upload-icon">📸</div>
+                <div class="img-upload-label">Click to upload a photo</div>
+                <div class="img-upload-hint">JPG, PNG, WEBP — automatically compressed to ~100KB</div>
+              </div>
+              <div class="img-preview-wrap" id="add-img-preview" style="display:none;">
+                <img class="img-preview-thumb" id="add-preview-img" src="" alt="">
+                <div class="img-preview-info">
+                  <div class="img-preview-name" id="add-preview-name">Image ready</div>
+                  <div class="img-preview-size" id="add-preview-size">Processing…</div>
+                  <div class="img-preview-actions">
+                    <button class="btn btn-ghost" style="padding:5px 10px;font-size:0.75rem" type="button" onclick="document.getElementById('add-img-file').click()">🔄 Change</button>
+                    <button class="btn btn-danger" style="padding:5px 10px;font-size:0.75rem" type="button" onclick="clearImg('add')">✕ Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div class="url-alt-row">
+                <span class="url-alt-label">or URL:</span>
+                <input class="url-alt-input" type="text" id="add-img-url" placeholder="https://example.com/photo.jpg" oninput="handleImgUrl('add',this.value)">
+              </div>
+            </div>
+            <input type="file" id="add-img-file" accept="image/*" style="display:none" onchange="handleImgFile('add',this)">
+          </div>
+
+          <div class="fg">
+            <div class="check-row">
+              <input type="checkbox" id="rv-verified" checked>
+              <label for="rv-verified">Mark as Verified Purchase</label>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:6px" onclick="addReview()">✨ Add Review</button>
         </div>
+
+        <!-- Reviews Table -->
         <div class="table-card">
           <div class="table-card-hdr">
             <div class="table-card-title">All Reviews</div>
@@ -432,18 +449,15 @@ tr:hover td { background:rgba(255,255,255,0.02); }
         </div>
       </div>
       <div class="tab-body">
-
-        <!-- Coupon Stats -->
         <div class="stats-grid" id="coupon-stats"></div>
 
-        <!-- Add Coupon Form -->
         <div class="form-card">
           <h3>➕ Create New Coupon</h3>
           <div class="fgrid">
             <div class="fg">
               <label>Coupon Code *</label>
               <input id="cp-code" type="text" placeholder="e.g. SAVE50" oninput="this.value=this.value.toUpperCase()">
-              <div class="fg-hint">Letters, numbers and hyphens only. Stored in UPPERCASE.</div>
+              <div class="fg-hint">Stored in UPPERCASE automatically</div>
             </div>
             <div class="fg">
               <label>Description</label>
@@ -466,33 +480,27 @@ tr:hover td { background:rgba(255,255,255,0.02); }
             <div class="fg">
               <label>Minimum Order (₹)</label>
               <input id="cp-min" type="number" placeholder="0 = no minimum" min="0" value="0">
-              <div class="fg-hint">Leave 0 for no minimum requirement</div>
             </div>
           </div>
           <div class="fgrid">
             <div class="fg">
               <label>Max Uses</label>
               <input id="cp-maxuses" type="number" placeholder="Leave blank for unlimited" min="1">
-              <div class="fg-hint">How many times this code can be used total</div>
             </div>
             <div class="fg">
               <label>Expiry Date &amp; Time</label>
               <input id="cp-expires" type="datetime-local">
-              <div class="fg-hint">Leave blank for no expiry</div>
             </div>
           </div>
-          <div class="fgrid">
-            <div class="fg" style="display:flex;align-items:flex-end;">
-              <div class="check-row">
-                <input type="checkbox" id="cp-active" checked>
-                <label for="cp-active">Active (visible to customers)</label>
-              </div>
+          <div class="fg" style="display:flex;align-items:flex-end;">
+            <div class="check-row">
+              <input type="checkbox" id="cp-active" checked>
+              <label for="cp-active">Active (visible to customers)</label>
             </div>
           </div>
           <button class="btn btn-primary" onclick="createCoupon()">🏷️ Create Coupon</button>
         </div>
 
-        <!-- Coupons Table -->
         <div class="table-card">
           <div class="table-card-hdr">
             <div class="table-card-title">All Coupon Codes</div>
@@ -500,7 +508,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
           </div>
           <div id="coupons-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
         </div>
-
       </div>
     </div>
 
@@ -515,6 +522,89 @@ tr:hover td { background:rgba(255,255,255,0.02); }
       <button class="modal-x" onclick="closeModal('order-modal')">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- EDIT REVIEW MODAL -->
+<div class="modal-bg" id="review-modal" onclick="if(event.target===this)closeModal('review-modal')">
+  <div class="modal edit-modal">
+    <div class="modal-hdr">
+      <div class="modal-title">✏️ Edit Review</div>
+      <button class="modal-x" onclick="closeModal('review-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-rv-id">
+      <div class="fgrid">
+        <div class="fg">
+          <label>Product *</label>
+          <select id="edit-rv-product"></select>
+        </div>
+        <div class="fg">
+          <label>Reviewer Name *</label>
+          <input id="edit-rv-name" type="text">
+        </div>
+      </div>
+      <div class="fgrid">
+        <div class="fg">
+          <label>Rating *</label>
+          <select id="edit-rv-rating">
+            <option value="5">⭐⭐⭐⭐⭐ — Excellent (5)</option>
+            <option value="4">⭐⭐⭐⭐ — Good (4)</option>
+            <option value="3">⭐⭐⭐ — Average (3)</option>
+            <option value="2">⭐⭐ — Poor (2)</option>
+            <option value="1">⭐ — Terrible (1)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Review Date &amp; Time</label>
+          <input id="edit-rv-date" type="datetime-local">
+          <div class="fg-hint">⏱️ Changing this adjusts when the review appears to be from</div>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Review Text *</label>
+        <textarea id="edit-rv-text" rows="4"></textarea>
+      </div>
+
+      <!-- IMAGE UPLOAD: EDIT MODE -->
+      <div class="fg">
+        <label>Review Photo</label>
+        <div class="img-upload-wrap">
+          <div class="img-upload-drop" id="edit-upload-drop" onclick="document.getElementById('edit-img-file').click()">
+            <div class="img-upload-icon">📸</div>
+            <div class="img-upload-label">Click to upload a new photo</div>
+            <div class="img-upload-hint">JPG, PNG, WEBP — auto-compressed</div>
+          </div>
+          <div class="img-preview-wrap" id="edit-img-preview" style="display:none;">
+            <img class="img-preview-thumb" id="edit-preview-img" src="" alt="">
+            <div class="img-preview-info">
+              <div class="img-preview-name" id="edit-preview-name">Photo</div>
+              <div class="img-preview-size" id="edit-preview-size"></div>
+              <div class="img-preview-actions">
+                <button class="btn btn-ghost" style="padding:5px 10px;font-size:0.75rem" type="button" onclick="document.getElementById('edit-img-file').click()">🔄 Replace</button>
+                <button class="btn btn-danger" style="padding:5px 10px;font-size:0.75rem" type="button" onclick="clearImg('edit')">✕ Remove</button>
+              </div>
+            </div>
+          </div>
+          <div class="url-alt-row">
+            <span class="url-alt-label">or URL:</span>
+            <input class="url-alt-input" type="text" id="edit-img-url" placeholder="https://example.com/photo.jpg" oninput="handleImgUrl('edit',this.value)">
+          </div>
+        </div>
+        <input type="file" id="edit-img-file" accept="image/*" style="display:none" onchange="handleImgFile('edit',this)">
+      </div>
+
+      <div class="fg">
+        <div class="check-row">
+          <input type="checkbox" id="edit-rv-verified">
+          <label for="edit-rv-verified">Mark as Verified Purchase</label>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveEditReview()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="closeModal('review-modal')">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -588,14 +678,15 @@ const SB_URL = 'https://aawhuykfhjsjtwrstnvt.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk';
 const PASS = 'kaptan';
 
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
 let allOrders   = [];
 let allSessions = [];
 let allReviews  = [];
 let allCoupons  = [];
 let products    = [];
+
+// Image state — one slot per context (add form vs edit modal)
+let addImageData  = null;
+let editImageData = null;
 
 // ══════════════════════════════════════════════
 // AUTH
@@ -638,7 +729,7 @@ function logout() {
 }
 
 // ══════════════════════════════════════════════
-// MOBILE SIDEBAR
+// SIDEBAR
 // ══════════════════════════════════════════════
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -654,13 +745,10 @@ function toggleArchiveSection() {
 }
 
 // ══════════════════════════════════════════════
-// SUPABASE HELPER
+// SUPABASE
 // ══════════════════════════════════════════════
 async function sb(path, method = 'GET', body = null) {
-  const h = {
-    'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`,
-    'Content-Type': 'application/json'
-  };
+  const h = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
   if (method === 'POST')   h['Prefer'] = 'return=representation';
   if (method === 'PATCH')  h['Prefer'] = 'return=minimal';
   if (method === 'DELETE') h['Prefer'] = 'return=minimal';
@@ -683,18 +771,15 @@ async function initAdmin() {
   } catch(e) {
     document.getElementById('rv-product').innerHTML = '<option value="">Failed to load</option>';
   }
-
-  // Dynamically update the value hint when type changes
   document.getElementById('cp-type').addEventListener('change', function() {
     document.getElementById('cp-value-hint').textContent =
       this.value === 'percent' ? 'Enter percentage (1–100)' : 'Enter amount in ₹';
   });
-
   loadOrders();
 }
 
 // ══════════════════════════════════════════════
-// TAB SWITCHING
+// TABS
 // ══════════════════════════════════════════════
 function switchTab(name, btn) {
   closeSidebar();
@@ -712,40 +797,34 @@ function switchTab(name, btn) {
 // ██ ORDERS
 // ══════════════════════════════════════════════
 const STATUS_LIST   = ['processing','confirmed','packed','shipped','out_for_delivery','delivered'];
-const STATUS_LABELS = {
-  processing:'Processing', confirmed:'Confirmed', packed:'Packed',
-  shipped:'Shipped', out_for_delivery:'Out for Delivery', delivered:'Delivered'
-};
+const STATUS_LABELS = { processing:'Processing', confirmed:'Confirmed', packed:'Packed', shipped:'Shipped', out_for_delivery:'Out for Delivery', delivered:'Delivered' };
 
 async function loadOrders() {
   setLoading('active-orders-wrap');
   document.getElementById('order-stats').innerHTML = '';
   try {
     allOrders = await sb('orders?select=*&order=created_at.desc');
-    renderOrderStats();
-    renderOrderTables();
+    renderOrderStats(); renderOrderTables();
   } catch(e) { showErr('active-orders-wrap', e.message); }
 }
 
 function renderOrderStats() {
-  const active  = allOrders.filter(o => !o.is_archived);
-  const revenue = active.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
+  const active    = allOrders.filter(o => !o.is_archived);
+  const revenue   = active.reduce((a, o) => a + (parseFloat(o.total)||0), 0);
   const delivered = active.filter(o => o.status === 'delivered').length;
   const pending   = active.filter(o => o.status === 'processing').length;
   document.getElementById('order-stats').innerHTML = `
     <div class="stat-card"><div class="stat-label">Active Orders</div><div class="stat-value">${active.length}</div></div>
     <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" style="color:var(--coral)">₹${revenue.toLocaleString('en-IN')}</div></div>
-    <div class="stat-card"><div class="stat-label">Delivered</div><div class="stat-value" style="color:var(--green)">${delivered}</div><div class="stat-sub">${active.length ? Math.round(delivered/active.length*100) : 0}% of active</div></div>
+    <div class="stat-card"><div class="stat-label">Delivered</div><div class="stat-value" style="color:var(--green)">${delivered}</div><div class="stat-sub">${active.length?Math.round(delivered/active.length*100):0}% of active</div></div>
     <div class="stat-card"><div class="stat-label">Processing</div><div class="stat-value" style="color:var(--yellow)">${pending}</div><div class="stat-sub">Awaiting action</div></div>`;
 }
 
 function filterOrders() {
   const q = document.getElementById('order-search').value.toLowerCase();
   const filtered = q ? allOrders.filter(o =>
-    (o.order_id||'').toLowerCase().includes(q) ||
-    (o.customer_name||'').toLowerCase().includes(q) ||
-    (o.mobile||'').includes(q) ||
-    (o.ip_address||'').toLowerCase().includes(q) ||
+    (o.order_id||'').toLowerCase().includes(q) || (o.customer_name||'').toLowerCase().includes(q) ||
+    (o.mobile||'').includes(q) || (o.ip_address||'').toLowerCase().includes(q) ||
     (o.status||'').toLowerCase().includes(q)) : allOrders;
   renderOrderTables(filtered);
 }
@@ -761,32 +840,25 @@ function renderOrderTables(filtered = null) {
 }
 
 function buildOrdersHTML(orders, isArchived) {
-  if (!orders.length) return `<div class="empty"><div class="empty-ico">${isArchived?'🗃️':'📦'}</div><div class="empty-txt">No ${isArchived?'archived':'active'} orders found.</div></div>`;
+  if (!orders.length) return `<div class="empty"><div class="empty-ico">${isArchived?'🗃️':'📦'}</div><div class="empty-txt">No ${isArchived?'archived':'active'} orders.</div></div>`;
   return `<div class="table-wrap"><table>
-    <thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Payment</th><th>IP Address</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-    <tbody>
-      ${orders.map(o => `<tr>
-        <td><span style="font-family:monospace;color:var(--coral);font-weight:800;font-size:0.82rem">${esc(o.order_id||'—')}</span></td>
-        <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
-        <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
-        <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
-        <td><span style="font-size:0.75rem;color:var(--muted);font-weight:700">${o.payment_method==='upi'?'📲 UPI':'💵 COD'}</span></td>
-        <td style="font-family:monospace;color:var(--muted);font-size:0.8rem">${esc(o.ip_address||'—')}</td>
-        <td>
-          <select class="status-sel" onchange="updateOrderStatus(${o.id},this.value,this)">
-            ${STATUS_LIST.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
-          </select>
-        </td>
-        <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
-        <td style="white-space:nowrap">
-          <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="viewOrder(${o.id})">👁️</button>
-          ${isArchived
-            ? `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},false)">📤</button>`
-            : `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},true)">🗃️</button>`}
-          <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
-        </td>
-      </tr>`).join('')}
-    </tbody></table></div>`;
+    <thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Payment</th><th>IP</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+    <tbody>${orders.map(o => `<tr>
+      <td><span style="font-family:monospace;color:var(--coral);font-weight:800;font-size:0.82rem">${esc(o.order_id||'—')}</span></td>
+      <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
+      <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
+      <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
+      <td><span style="font-size:0.75rem;color:var(--muted);font-weight:700">${o.payment_method==='upi'?'📲 UPI':'💵 COD'}</span></td>
+      <td style="font-family:monospace;color:var(--muted);font-size:0.8rem">${esc(o.ip_address||'—')}</td>
+      <td><select class="status-sel" onchange="updateOrderStatus(${o.id},this.value,this)">${STATUS_LIST.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}</select></td>
+      <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="viewOrder(${o.id})">👁️</button>
+        ${isArchived?`<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},false)">📤</button>`:
+                     `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},true)">🗃️</button>`}
+        <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
+      </td>
+    </tr>`).join('')}</tbody></table></div>`;
 }
 
 async function updateOrderStatus(id, status, sel) {
@@ -797,7 +869,7 @@ async function updateOrderStatus(id, status, sel) {
     if (o) o.status = status;
     renderOrderStats();
     showToast(`✅ Updated to "${STATUS_LABELS[status]}"`);
-  } catch(e) { showToast('⚠️ Failed to update status'); }
+  } catch(e) { showToast('⚠️ Failed to update'); }
   finally { sel.disabled = false; }
 }
 
@@ -807,10 +879,9 @@ async function toggleArchiveOrder(id, archive) {
     const o = allOrders.find(x => x.id === id);
     if (o) o.is_archived = archive;
     if (archive && !document.getElementById('archived-orders-body').classList.contains('open')) toggleArchiveSection();
-    renderOrderStats();
-    filterOrders();
-    showToast(archive ? '🗃️ Order archived' : '📤 Order unarchived');
-  } catch(e) { showToast('⚠️ Failed! Ensure "is_archived" column exists in Supabase.'); }
+    renderOrderStats(); filterOrders();
+    showToast(archive ? '🗃️ Archived' : '📤 Unarchived');
+  } catch(e) { showToast('⚠️ Failed! Ensure "is_archived" column exists.'); }
 }
 
 function viewOrder(id) {
@@ -823,7 +894,7 @@ function viewOrder(id) {
     <div class="drow"><div class="dkey">Mobile</div><div class="dval" style="font-family:monospace">${esc(o.mobile||'—')}</div></div>
     <div class="drow"><div class="dkey">Address</div><div class="dval">${esc(o.address||'—')}</div></div>
     <div class="drow"><div class="dkey">Total Paid</div><div class="dval" style="color:var(--green);font-weight:900">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</div></div>
-    ${o.coupon_code ? `<div class="drow"><div class="dkey">Coupon Used</div><div class="dval"><span style="color:var(--coral);font-weight:800;font-family:monospace">${esc(o.coupon_code)}</span> <span style="color:var(--muted)">(-₹${(parseFloat(o.discount_amount)||0).toLocaleString('en-IN')} total discount)</span></div></div>` : ''}
+    ${o.coupon_code?`<div class="drow"><div class="dkey">Coupon</div><div class="dval"><span style="color:var(--coral);font-weight:800;font-family:monospace">${esc(o.coupon_code)}</span> <span style="color:var(--muted)">(-₹${(parseFloat(o.discount_amount)||0).toLocaleString('en-IN')})</span></div></div>`:''}
     <div class="drow"><div class="dkey">Payment</div><div class="dval">${o.payment_method==='upi'?'📲 UPI / Online':'💵 Cash on Delivery'}</div></div>
     <div class="drow"><div class="dkey">IP Address</div><div class="dval" style="font-family:monospace;color:var(--blue)">${esc(o.ip_address||'—')}</div></div>
     <div class="drow"><div class="dkey">Status</div><div class="dval"><span class="badge badge-${o.status||'processing'}">${STATUS_LABELS[o.status]||o.status}</span></div></div>
@@ -831,7 +902,7 @@ function viewOrder(id) {
     <div class="drow"><div class="dkey">Date</div><div class="dval">${fmtDate(o.created_at)}</div></div>
     <div class="drow" style="flex-direction:column;gap:8px">
       <div class="dkey" style="margin-bottom:4px">Items</div>
-      ${items.length ? items.map(i=>`<div class="item-chip"><span>${esc(i.name||'Unknown')} <span style="color:var(--muted)">× ${i.qty||1}</span>${i.variant?` <span style="color:var(--muted);font-size:0.78em;">(${esc(i.variant)})</span>`:''}</span><span class="item-chip-price">₹${((i.price||0)*(i.qty||1)).toLocaleString('en-IN')}</span></div>`).join('') : '<div style="color:var(--muted);font-size:0.85rem">No item details</div>'}
+      ${items.length?items.map(i=>`<div class="item-chip"><span>${esc(i.name||'Unknown')} <span style="color:var(--muted)">× ${i.qty||1}</span>${i.variant?` <span style="color:var(--muted);font-size:0.78em;">(${esc(i.variant)})</span>`:''}</span><span class="item-chip-price">₹${((i.price||0)*(i.qty||1)).toLocaleString('en-IN')}</span></div>`).join(''):'<div style="color:var(--muted);font-size:0.85rem">No item details</div>'}
     </div>`;
   document.getElementById('order-modal').classList.add('show');
 }
@@ -854,16 +925,14 @@ async function loadSessions() {
   document.getElementById('session-stats').innerHTML = '';
   try {
     allSessions = await sb('session?select=*&order=date.desc');
-    renderSessionStats();
-    renderSessionGroups(allSessions);
+    renderSessionStats(); renderSessionGroups(allSessions);
   } catch(e) { showErr('sessions-wrap', e.message); }
 }
 
 function filterSessions() {
   const q = document.getElementById('session-search').value.toLowerCase();
   const filtered = q ? allSessions.filter(s =>
-    (s.ip_address||'').toLowerCase().includes(q) ||
-    (s.device||'').toLowerCase().includes(q) ||
+    (s.ip_address||'').toLowerCase().includes(q) || (s.device||'').toLowerCase().includes(q) ||
     (s.session_id||'').toLowerCase().includes(q)) : allSessions;
   renderSessionGroups(filtered);
 }
@@ -882,14 +951,14 @@ function renderSessionStats() {
 
 function renderSessionGroups(sessionsToRender) {
   if (!sessionsToRender.length) {
-    document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No matching sessions found.</div></div>';
+    document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No sessions found.</div></div>';
     return;
   }
   const groups = {};
   sessionsToRender.forEach(s => { const key = s.ip_address||'Unknown'; if (!groups[key]) groups[key]=[]; groups[key].push(s); });
   const sorted = Object.entries(groups).sort((a,b) => b[1].length - a[1].length);
   document.getElementById('sessions-wrap').innerHTML = sorted.map(([ip, sessions]) => {
-    const safeId = 'g_' + ip.replace(/[.\s]/g,'_');
+    const safeId  = 'g_' + ip.replace(/[.\s]/g,'_');
     const devices = [...new Set(sessions.map(s=>s.device).filter(Boolean))];
     const carted  = sessions.filter(s=>s.added_cart).length;
     const latest  = sessions[0]?.date;
@@ -931,8 +1000,8 @@ function renderSessionGroups(sessionsToRender) {
 
 function toggleGroup(id) {
   document.getElementById(id).classList.toggle('open');
-  const chev = document.getElementById('chev-' + id);
-  if (chev) chev.classList.toggle('open');
+  const c = document.getElementById('chev-' + id);
+  if (c) c.classList.toggle('open');
 }
 
 async function deleteOneSession(id) {
@@ -948,8 +1017,7 @@ async function deleteIPGroup(ip) {
   const group = allSessions.filter(s => (s.ip_address||'Unknown') === ip);
   if (!confirm(`Delete all ${group.length} session(s) from ${ip}?`)) return;
   try {
-    const ids = group.map(s => s.id).join(',');
-    await sb(`session?id=in.(${ids})`, 'DELETE');
+    await sb(`session?id=in.(${group.map(s=>s.id).join(',')})`, 'DELETE');
     allSessions = allSessions.filter(s => (s.ip_address||'Unknown') !== ip);
     renderSessionStats(); filterSessions();
     showToast(`🗑️ Deleted ${group.length} sessions from ${ip}`);
@@ -960,8 +1028,7 @@ async function deleteAllSessions() {
   if (!allSessions.length) { showToast('No sessions to delete'); return; }
   if (!confirm(`Delete ALL ${allSessions.length} sessions?\n\nThis cannot be undone.`)) return;
   try {
-    const ids = allSessions.map(s => s.id).join(',');
-    await sb(`session?id=in.(${ids})`, 'DELETE');
+    await sb(`session?id=in.(${allSessions.map(s=>s.id).join(',')})`, 'DELETE');
     allSessions = [];
     document.getElementById('session-search').value = '';
     renderSessionStats(); renderSessionGroups([]);
@@ -970,11 +1037,114 @@ async function deleteAllSessions() {
 }
 
 // ══════════════════════════════════════════════
+// ██ IMAGE UPLOAD HELPERS
+// ══════════════════════════════════════════════
+
+// Canvas-based compression → keeps images tiny enough for the database TEXT column
+async function compressAdminImage(file, maxDim = 900) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+          else { w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.75));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleImgFile(ctx, input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showToast('⚠️ Please select a valid image file');
+    input.value = ''; return;
+  }
+
+  // Show loading indicator in preview
+  const nameEl = document.getElementById(`${ctx}-preview-name`);
+  const sizeEl = document.getElementById(`${ctx}-preview-size`);
+  document.getElementById(`${ctx}-upload-drop`).style.display = 'none';
+  document.getElementById(`${ctx}-img-preview`).style.display = 'flex';
+  document.getElementById(`${ctx}-preview-img`).src = '';
+  if (nameEl) nameEl.textContent = file.name;
+  if (sizeEl) sizeEl.textContent = '⏳ Compressing…';
+
+  try {
+    const compressed = await compressAdminImage(file);
+    
+    if (ctx === 'add') addImageData = compressed;
+    else editImageData = compressed;
+
+    // Update the preview
+    document.getElementById(`${ctx}-preview-img`).src = compressed;
+    document.getElementById(`${ctx}-img-url`).value = '';
+    
+    const sizeKB = Math.round(compressed.length * 0.75 / 1024);
+    if (sizeEl) sizeEl.textContent = `✅ Compressed to ~${sizeKB}KB`;
+    
+    showToast(`📸 Image compressed to ~${sizeKB}KB`);
+  } catch(e) {
+    showToast('⚠️ Failed to process image. Try a different file.');
+    clearImg(ctx);
+    input.value = '';
+  }
+}
+
+function handleImgUrl(ctx, value) {
+  const url = value.trim();
+  if (ctx === 'add') addImageData = url || null;
+  else editImageData = url || null;
+
+  if (url) {
+    document.getElementById(`${ctx}-upload-drop`).style.display = 'none';
+    document.getElementById(`${ctx}-img-preview`).style.display = 'flex';
+    const imgEl = document.getElementById(`${ctx}-preview-img`);
+    imgEl.src = url;
+    imgEl.onerror = function() { this.onerror=null; this.src=''; };
+    document.getElementById(`${ctx}-preview-name`).textContent = 'Image URL';
+    document.getElementById(`${ctx}-preview-size`).textContent = 'From external link';
+  } else {
+    // Don't call clearImg to avoid clearing the URL input itself
+    document.getElementById(`${ctx}-upload-drop`).style.display = 'flex';
+    document.getElementById(`${ctx}-img-preview`).style.display = 'none';
+    document.getElementById(`${ctx}-preview-img`).src = '';
+    if (ctx === 'add') addImageData = null;
+    else editImageData = null;
+  }
+}
+
+function clearImg(ctx) {
+  if (ctx === 'add') addImageData = null;
+  else editImageData = null;
+  document.getElementById(`${ctx}-upload-drop`).style.display = 'flex';
+  document.getElementById(`${ctx}-img-preview`).style.display = 'none';
+  document.getElementById(`${ctx}-preview-img`).src = '';
+  document.getElementById(`${ctx}-img-url`).value = '';
+  document.getElementById(`${ctx}-img-file`).value = '';
+}
+
+// ══════════════════════════════════════════════
 // ██ REVIEWS
 // ══════════════════════════════════════════════
 async function loadReviews() {
   setLoading('reviews-wrap');
   document.getElementById('review-count').textContent = '';
+  // Set default date for add form to "now"
+  const dateEl = document.getElementById('rv-date');
+  if (dateEl && !dateEl.value) dateEl.value = getNowLocal();
   try {
     allReviews = await sb('reviews?select=*&order=id.desc');
     renderReviewsTable();
@@ -988,7 +1158,7 @@ function renderReviewsTable() {
     return;
   }
   document.getElementById('reviews-wrap').innerHTML = `<div class="table-wrap"><table>
-    <thead><tr><th>Product</th><th>Name</th><th>Rating</th><th>Review</th><th>Photo</th><th>Verified</th><th>Date</th><th>Delete</th></tr></thead>
+    <thead><tr><th>Product</th><th>Name</th><th>Rating</th><th>Review</th><th>Photo</th><th>Verified</th><th>Date</th><th>Actions</th></tr></thead>
     <tbody>${allReviews.map(r => {
       const pName = products.find(p => p.id === r.product_id)?.name || `Product #${r.product_id}`;
       const stars = '★'.repeat(r.rating||5) + '☆'.repeat(5-(r.rating||5));
@@ -996,33 +1166,126 @@ function renderReviewsTable() {
         <td style="font-weight:700;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pName)}">${esc(pName)}</td>
         <td style="font-weight:700;white-space:nowrap">${esc(r.name||'—')}</td>
         <td style="white-space:nowrap"><span style="color:var(--yellow);font-size:0.85rem">${stars}</span> <span style="color:var(--muted);font-size:0.78rem">${r.rating}/5</span></td>
-        <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:0.83rem" title="${esc(r.text||'')}">${esc(r.text||'—')}</td>
-        <td>${r.image_url ? `<img src="${r.image_url}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;border:1px solid var(--border);cursor:pointer" onclick="window.open(this.src,'_blank')" title="View photo">` : '<span style="color:var(--muted);font-size:0.75rem">None</span>'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:0.83rem" title="${esc(r.text||'')}">${esc(r.text||'—')}</td>
+        <td>${r.image_url
+          ? `<img src="${r.image_url}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;border:1px solid var(--border);cursor:pointer" onclick="window.open(this.src,'_blank')" title="Click to view full image">`
+          : '<span style="color:var(--muted);font-size:0.75rem">None</span>'}</td>
         <td>${r.verified?'<span style="color:var(--green);font-weight:800">✅ Yes</span>':'<span style="color:var(--muted)">No</span>'}</td>
         <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${r.created_at?fmtDate(r.created_at):'—'}</td>
-        <td><button class="btn btn-danger" style="padding:6px 12px;font-size:0.78rem" onclick="deleteReview(${r.id})">🗑️</button></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="openEditReview(${r.id})">✏️ Edit</button>
+          <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteReview(${r.id})">🗑️</button>
+        </td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 
 async function addReview() {
-  const pid = parseInt(document.getElementById('rv-product').value);
-  const name = document.getElementById('rv-name').value.trim();
-  const rating = parseInt(document.getElementById('rv-rating').value);
-  const text = document.getElementById('rv-text').value.trim();
+  const pid      = parseInt(document.getElementById('rv-product').value);
+  const name     = document.getElementById('rv-name').value.trim();
+  const rating   = parseInt(document.getElementById('rv-rating').value);
+  const text     = document.getElementById('rv-text').value.trim();
   const verified = document.getElementById('rv-verified').checked;
+  const dateVal  = document.getElementById('rv-date').value;
+  const created_at = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+
   if (!pid)  { showToast('⚠️ Select a product'); return; }
   if (!name) { showToast('⚠️ Enter reviewer name'); return; }
   if (!text) { showToast('⚠️ Enter review text'); return; }
+
   try {
-    await sb('reviews', 'POST', { product_id: pid, name, rating, text, verified });
+    await sb('reviews', 'POST', { product_id: pid, name, rating, text, image_url: addImageData, verified, created_at });
+    // Reset form
     document.getElementById('rv-name').value = '';
     document.getElementById('rv-text').value = '';
     document.getElementById('rv-rating').value = '5';
     document.getElementById('rv-verified').checked = true;
+    document.getElementById('rv-date').value = getNowLocal();
+    clearImg('add');
     showToast('✅ Review added!');
     await loadReviews();
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+function openEditReview(id) {
+  const r = allReviews.find(x => x.id === id); if (!r) return;
+
+  // Product select
+  document.getElementById('edit-rv-product').innerHTML = products.map(p =>
+    `<option value="${p.id}" ${p.id === r.product_id ? 'selected' : ''}>${esc(p.name)}</option>`
+  ).join('');
+
+  // Basic fields
+  document.getElementById('edit-rv-id').value = r.id;
+  document.getElementById('edit-rv-name').value = r.name || '';
+  document.getElementById('edit-rv-rating').value = r.rating || 5;
+  document.getElementById('edit-rv-text').value = r.text || '';
+  document.getElementById('edit-rv-verified').checked = !!r.verified;
+
+  // Date field
+  if (r.created_at) {
+    const d = new Date(r.created_at);
+    // Convert to local datetime-local format
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+    document.getElementById('edit-rv-date').value = local;
+  } else {
+    document.getElementById('edit-rv-date').value = getNowLocal();
+  }
+
+  // Image handling
+  clearImg('edit'); // resets the UI completely first
+  
+  if (r.image_url) {
+    if (r.image_url.startsWith('data:image')) {
+      // It's a base64 image saved locally
+      editImageData = r.image_url;
+      document.getElementById('edit-upload-drop').style.display = 'none';
+      document.getElementById('edit-img-preview').style.display = 'flex';
+      document.getElementById('edit-preview-img').src = r.image_url;
+      document.getElementById('edit-preview-name').textContent = 'Uploaded Photo';
+      const sizeKB = Math.round(r.image_url.length * 0.75 / 1024);
+      document.getElementById('edit-preview-size').textContent = `~${sizeKB}KB`;
+    } else {
+      // It's a standard URL
+      document.getElementById('edit-img-url').value = r.image_url;
+      handleImgUrl('edit', r.image_url);
+    }
+  }
+
+  document.getElementById('review-modal').classList.add('show');
+}
+
+async function saveEditReview() {
+  const id = parseInt(document.getElementById('edit-rv-id').value);
+  const pid = parseInt(document.getElementById('edit-rv-product').value);
+  const name = document.getElementById('edit-rv-name').value.trim();
+  const rating = parseInt(document.getElementById('edit-rv-rating').value);
+  const text = document.getElementById('edit-rv-text').value.trim();
+  const verified = document.getElementById('edit-rv-verified').checked;
+  const dateVal = document.getElementById('edit-rv-date').value;
+  const created_at = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+
+  if (!pid)  { showToast('⚠️ Select a product'); return; }
+  if (!name) { showToast('⚠️ Enter reviewer name'); return; }
+  if (!text) { showToast('⚠️ Enter review text'); return; }
+
+  try {
+    await sb(`reviews?id=eq.${id}`, 'PATCH', { 
+      product_id: pid, name, rating, text, image_url: editImageData, verified, created_at 
+    });
+    
+    // Update local state directly to save a fetch call
+    const r = allReviews.find(x => x.id === id);
+    if (r) {
+      Object.assign(r, { product_id: pid, name, rating, text, image_url: editImageData, verified, created_at });
+    }
+    
+    closeModal('review-modal');
+    renderReviewsTable();
+    showToast(`✅ Review updated!`);
+  } catch(e) {
+    showToast('⚠️ Failed: ' + e.message);
+  }
 }
 
 async function deleteReview(id) {
@@ -1034,6 +1297,7 @@ async function deleteReview(id) {
     showToast('🗑️ Review deleted');
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
+
 
 // ══════════════════════════════════════════════
 // ██ COUPONS
@@ -1206,7 +1470,6 @@ function openEditCoupon(id) {
   document.getElementById('edit-cp-maxuses').value = c.max_uses || '';
   document.getElementById('edit-cp-active').checked = !!c.active;
 
-  // Convert UTC to local datetime-local format for the input
   if (c.expires_at) {
     const d = new Date(c.expires_at);
     const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
@@ -1270,6 +1533,11 @@ async function deleteCoupon(id, code) {
 // ══════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════
+function getNowLocal() {
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+}
+
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 function esc(s) {
