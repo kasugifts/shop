@@ -54,7 +54,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
 /* ── SIDEBAR ── */
 .sidebar { width:250px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; height:100vh; z-index:1000; transition:transform 0.3s cubic-bezier(0.16,1,0.3,1); }
-.sidebar-brand { padding:28px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.sidebar-brand { padding:22px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
 .sidebar-logo { font-size:1.8rem; }
 .sidebar-name { font-size:1.05rem; font-weight:900; color:var(--coral); }
 .sidebar-sub { font-size:0.7rem; color:var(--muted); margin-top:2px; }
@@ -64,11 +64,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .nav-item:hover { background:var(--surface2); color:var(--text); }
 .nav-item.active { background:rgba(218,110,89,0.15); color:var(--coral); }
 .nav-icon { font-size:1.1rem; width:22px; text-align:center; flex-shrink:0; }
-.sidebar-foot { padding:20px 22px; border-top:1px solid var(--border); }
+.sidebar-foot { padding:16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+.visit-site-btn { width:100%; padding:10px; background:rgba(74,158,255,0.1); border:1px solid rgba(74,158,255,0.25); color:var(--blue); border-radius:var(--radius); cursor:pointer; font-size:0.82rem; font-weight:800; font-family:inherit; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:6px; text-decoration:none; }
+.visit-site-btn:hover { background:rgba(74,158,255,0.2); transform:translateY(-1px); }
 .logout-btn { width:100%; padding:10px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); border-radius:var(--radius); cursor:pointer; font-size:0.82rem; font-weight:700; font-family:inherit; transition:all 0.2s; }
 .logout-btn:hover { background:rgba(231,76,60,0.1); color:var(--red); border-color:rgba(231,76,60,0.3); }
 
-/* Sidebar Overlay for Mobile */
 .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; display:none; backdrop-filter:blur(3px); animation:fadeIn 0.3s; }
 .sidebar-overlay.show { display:block; }
 
@@ -85,7 +86,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .top-bar-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .tab-body { padding:28px 32px; flex:1; }
 
-/* Mobile Menu Toggle */
 .mobile-toggle { display:none; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:1.2rem; cursor:pointer; padding:6px 12px; transition:all 0.2s; }
 .mobile-toggle:hover { background:var(--border); }
 
@@ -100,6 +100,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .btn-danger:hover { background:rgba(231,76,60,0.2); }
 .btn-success { background:rgba(76,175,118,0.1); color:var(--green); border:1px solid rgba(76,175,118,0.25); }
 .btn-success:hover { background:rgba(76,175,118,0.2); }
+.btn-warning { background:rgba(247,183,49,0.1); color:var(--yellow); border:1px solid rgba(247,183,49,0.25); }
+.btn-warning:hover { background:rgba(247,183,49,0.2); }
 
 /* ── STATS ── */
 .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:16px; margin-bottom:28px; }
@@ -113,7 +115,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .table-card-hdr { padding:16px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .table-card-title { font-size:0.95rem; font-weight:800; }
 .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-table { width:100%; border-collapse:collapse; min-width:800px; }
+table { width:100%; border-collapse:collapse; min-width:700px; }
 th { padding:11px 16px; text-align:left; font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:800; border-bottom:1px solid var(--border); white-space:nowrap; background:var(--surface2); }
 td { padding:13px 16px; font-size:0.87rem; border-bottom:1px solid rgba(42,45,62,0.5); vertical-align:middle; }
 tr:last-child td { border-bottom:none; }
@@ -131,6 +133,11 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .badge-desktop { background:rgba(147,112,219,0.1); color:#9370db; }
 .badge-tablet { background:rgba(76,175,118,0.1); color:var(--green); }
 .badge-unknown { background:rgba(124,128,153,0.1); color:var(--muted); }
+.badge-active { background:rgba(76,175,118,0.12); color:var(--green); }
+.badge-inactive { background:rgba(124,128,153,0.12); color:var(--muted); }
+.badge-flat { background:rgba(218,110,89,0.12); color:var(--coral); }
+.badge-percent { background:rgba(74,158,255,0.12); color:var(--blue); }
+.badge-expired { background:rgba(231,76,60,0.12); color:var(--red); }
 
 /* ── STATUS SELECT ── */
 .status-sel { background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; font-size:0.8rem; font-family:inherit; cursor:pointer; }
@@ -158,10 +165,11 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .archived-body { display: none; }
 .archived-body.open { display: block; border-top: 1px solid var(--border); }
 
-/* ── REVIEW FORM ── */
+/* ── FORM ── */
 .form-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px; }
 .form-card h3 { font-size:0.95rem; font-weight:900; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
 .fgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.fgrid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
 .fg { margin-bottom:14px; }
 .fg label { display:block; font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:800; margin-bottom:7px; }
 .fg input, .fg select, .fg textarea { width:100%; padding:10px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:0.88rem; font-family:inherit; transition:border-color 0.2s; resize:vertical; }
@@ -170,6 +178,14 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .check-row { display:flex; align-items:center; gap:8px; margin-top:8px; }
 .check-row input[type=checkbox] { width:16px; height:16px; accent-color:var(--coral); cursor:pointer; flex-shrink:0; }
 .check-row label { font-size:0.85rem; font-weight:700; cursor:pointer; margin:0; }
+.fg-hint { font-size:0.72rem; color:var(--muted); margin-top:5px; }
+
+/* ── COUPON TOGGLE PILL ── */
+.toggle-pill { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800; cursor:pointer; border:none; font-family:inherit; transition:all 0.2s; }
+.toggle-pill.on  { background:rgba(76,175,118,0.15); color:var(--green); border:1px solid rgba(76,175,118,0.3); }
+.toggle-pill.on:hover  { background:rgba(76,175,118,0.25); }
+.toggle-pill.off { background:rgba(124,128,153,0.12); color:var(--muted); border:1px solid rgba(124,128,153,0.2); }
+.toggle-pill.off:hover { background:rgba(124,128,153,0.2); }
 
 /* ── EMPTY / LOADER ── */
 .empty { padding:60px; text-align:center; }
@@ -194,6 +210,9 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 .item-chip { background:var(--surface2); border:1px solid var(--border); padding:8px 14px; border-radius:8px; font-size:0.83rem; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
 .item-chip-price { color:var(--coral); font-weight:900; }
 
+/* ── EDIT COUPON MODAL ── */
+.edit-modal { width:min(640px,100%); }
+
 /* ── TOAST ── */
 .toast { position:fixed; bottom:24px; right:24px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:13px 20px; border-radius:10px; font-size:0.85rem; font-weight:700; z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:320px; }
 .toast.show { transform:translateY(0); opacity:1; }
@@ -208,7 +227,7 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 }
 
 @media(max-width:600px){
-  .fgrid { grid-template-columns:1fr; }
+  .fgrid, .fgrid-3 { grid-template-columns:1fr; }
   .stats-grid { grid-template-columns:1fr 1fr; }
   .top-bar-right { width:100%; }
   .top-bar-right .search-box { width: 100%; min-width: auto; }
@@ -225,12 +244,10 @@ tr:hover td { background:rgba(255,255,255,0.02); }
     <div class="login-sub">Restricted access — authorized personnel only</div>
     <input class="login-input" id="pw-input" type="password" placeholder="Enter password"
       onkeydown="if(event.key==='Enter')tryLogin()">
-    
     <div class="check-row" style="margin-bottom: 24px; justify-content: center;">
       <input type="checkbox" id="remember-me">
       <label for="remember-me" style="color: var(--muted); font-size: 0.85rem;">Remember me on this device</label>
     </div>
-
     <button class="login-btn" onclick="tryLogin()">Sign In →</button>
     <div class="login-err" id="login-err">❌ Incorrect password. Try again.</div>
   </div>
@@ -239,7 +256,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 <!-- ══ ADMIN ══ -->
 <div class="admin-layout" id="admin-layout">
 
-  <!-- SIDEBAR OVERLAY (Mobile) -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
@@ -262,8 +278,14 @@ tr:hover td { background:rgba(255,255,255,0.02); }
       <button class="nav-item" onclick="switchTab('reviews',this)">
         <span class="nav-icon">⭐</span> Reviews
       </button>
+      <button class="nav-item" onclick="switchTab('coupons',this)">
+        <span class="nav-icon">🏷️</span> Coupons
+      </button>
     </nav>
     <div class="sidebar-foot">
+      <a class="visit-site-btn" href="index.html" target="_blank">
+        🌐 Visit Main Site
+      </a>
       <button class="logout-btn" onclick="logout()">🚪 Sign Out</button>
     </div>
   </aside>
@@ -288,8 +310,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
       </div>
       <div class="tab-body">
         <div class="stats-grid" id="order-stats"></div>
-        
-        <!-- Active Orders -->
         <div class="table-card">
           <div class="table-card-hdr">
             <div class="table-card-title">Active Orders</div>
@@ -297,8 +317,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
           </div>
           <div id="active-orders-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
         </div>
-
-        <!-- Archived Orders -->
         <div class="table-card" style="margin-top: 24px;">
           <div class="table-card-hdr" style="cursor:pointer" onclick="toggleArchiveSection()">
             <div style="display:flex;align-items:center;gap:10px;">
@@ -313,7 +331,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -354,7 +371,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
         </div>
       </div>
       <div class="tab-body">
-        <!-- Add Review -->
         <div class="form-card">
           <h3>➕ Add New Review</h3>
           <div class="fgrid">
@@ -391,8 +407,6 @@ tr:hover td { background:rgba(255,255,255,0.02); }
           </div>
           <button class="btn btn-primary" onclick="addReview()">✨ Add Review</button>
         </div>
-
-        <!-- Reviews Table -->
         <div class="table-card">
           <div class="table-card-hdr">
             <div class="table-card-title">All Reviews</div>
@@ -403,17 +417,164 @@ tr:hover td { background:rgba(255,255,255,0.02); }
       </div>
     </div>
 
+    <!-- ── COUPONS TAB ── -->
+    <div id="tab-coupons" class="tab-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+          <div>
+            <h2>🏷️ Coupons</h2>
+            <p>Create, edit and manage discount coupon codes</p>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <button class="btn btn-ghost" onclick="loadCoupons()">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="tab-body">
+
+        <!-- Coupon Stats -->
+        <div class="stats-grid" id="coupon-stats"></div>
+
+        <!-- Add Coupon Form -->
+        <div class="form-card">
+          <h3>➕ Create New Coupon</h3>
+          <div class="fgrid">
+            <div class="fg">
+              <label>Coupon Code *</label>
+              <input id="cp-code" type="text" placeholder="e.g. SAVE50" oninput="this.value=this.value.toUpperCase()">
+              <div class="fg-hint">Letters, numbers and hyphens only. Stored in UPPERCASE.</div>
+            </div>
+            <div class="fg">
+              <label>Description</label>
+              <input id="cp-desc" type="text" placeholder="e.g. Welcome offer for new customers">
+            </div>
+          </div>
+          <div class="fgrid-3">
+            <div class="fg">
+              <label>Discount Type *</label>
+              <select id="cp-type">
+                <option value="flat">Flat (₹ Fixed Amount)</option>
+                <option value="percent">Percent (% Off)</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Discount Value *</label>
+              <input id="cp-value" type="number" placeholder="e.g. 100" min="1">
+              <div class="fg-hint" id="cp-value-hint">Enter amount in ₹</div>
+            </div>
+            <div class="fg">
+              <label>Minimum Order (₹)</label>
+              <input id="cp-min" type="number" placeholder="0 = no minimum" min="0" value="0">
+              <div class="fg-hint">Leave 0 for no minimum requirement</div>
+            </div>
+          </div>
+          <div class="fgrid">
+            <div class="fg">
+              <label>Max Uses</label>
+              <input id="cp-maxuses" type="number" placeholder="Leave blank for unlimited" min="1">
+              <div class="fg-hint">How many times this code can be used total</div>
+            </div>
+            <div class="fg">
+              <label>Expiry Date &amp; Time</label>
+              <input id="cp-expires" type="datetime-local">
+              <div class="fg-hint">Leave blank for no expiry</div>
+            </div>
+          </div>
+          <div class="fgrid">
+            <div class="fg" style="display:flex;align-items:flex-end;">
+              <div class="check-row">
+                <input type="checkbox" id="cp-active" checked>
+                <label for="cp-active">Active (visible to customers)</label>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="createCoupon()">🏷️ Create Coupon</button>
+        </div>
+
+        <!-- Coupons Table -->
+        <div class="table-card">
+          <div class="table-card-hdr">
+            <div class="table-card-title">All Coupon Codes</div>
+            <div id="coupon-count" style="font-size:0.8rem;color:var(--muted)"></div>
+          </div>
+          <div id="coupons-wrap"><div class="loader-wrap"><div class="spinner"></div></div></div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 </div>
 
 <!-- ORDER DETAIL MODAL -->
-<div class="modal-bg" id="order-modal" onclick="if(event.target===this)closeModal()">
+<div class="modal-bg" id="order-modal" onclick="if(event.target===this)closeModal('order-modal')">
   <div class="modal">
     <div class="modal-hdr">
       <div class="modal-title">📦 Order Details</div>
-      <button class="modal-x" onclick="closeModal()">✕</button>
+      <button class="modal-x" onclick="closeModal('order-modal')">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- EDIT COUPON MODAL -->
+<div class="modal-bg" id="coupon-modal" onclick="if(event.target===this)closeModal('coupon-modal')">
+  <div class="modal edit-modal">
+    <div class="modal-hdr">
+      <div class="modal-title">✏️ Edit Coupon</div>
+      <button class="modal-x" onclick="closeModal('coupon-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-cp-id">
+      <div class="fgrid">
+        <div class="fg">
+          <label>Coupon Code *</label>
+          <input id="edit-cp-code" type="text" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div class="fg">
+          <label>Description</label>
+          <input id="edit-cp-desc" type="text">
+        </div>
+      </div>
+      <div class="fgrid-3">
+        <div class="fg">
+          <label>Discount Type *</label>
+          <select id="edit-cp-type">
+            <option value="flat">Flat (₹ Fixed Amount)</option>
+            <option value="percent">Percent (% Off)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Discount Value *</label>
+          <input id="edit-cp-value" type="number" min="1">
+        </div>
+        <div class="fg">
+          <label>Minimum Order (₹)</label>
+          <input id="edit-cp-min" type="number" min="0">
+        </div>
+      </div>
+      <div class="fgrid">
+        <div class="fg">
+          <label>Max Uses (blank = unlimited)</label>
+          <input id="edit-cp-maxuses" type="number" min="1">
+        </div>
+        <div class="fg">
+          <label>Expiry Date &amp; Time</label>
+          <input id="edit-cp-expires" type="datetime-local">
+        </div>
+      </div>
+      <div class="fg">
+        <div class="check-row">
+          <input type="checkbox" id="edit-cp-active">
+          <label for="edit-cp-active">Active (visible to customers)</label>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveEditCoupon()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="closeModal('coupon-modal')">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -421,11 +582,11 @@ tr:hover td { background:rgba(255,255,255,0.02); }
 
 <script>
 // ══════════════════════════════════════════════
-// CONFIG — replace with your real values
+// CONFIG
 // ══════════════════════════════════════════════
 const SB_URL = 'https://aawhuykfhjsjtwrstnvt.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk'; // starts with eyJ...
-const PASS    = 'kaptan';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk';
+const PASS = 'kaptan';
 
 // ══════════════════════════════════════════════
 // STATE
@@ -433,21 +594,19 @@ const PASS    = 'kaptan';
 let allOrders   = [];
 let allSessions = [];
 let allReviews  = [];
+let allCoupons  = [];
 let products    = [];
 
 // ══════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════
-// Check auth immediately to prevent blinking
 checkAuth();
 
 function checkAuth() {
   const isAuth = localStorage.getItem('kasu_admin_auth') === 'true' || sessionStorage.getItem('kasu_admin_auth') === 'true';
-  
   if (isAuth) {
     document.getElementById('login-screen').classList.remove('show');
     document.getElementById('admin-layout').classList.add('show');
-    // Initialize data ONLY if we are authenticated
     initAdmin();
   } else {
     document.getElementById('admin-layout').classList.remove('show');
@@ -459,13 +618,9 @@ function tryLogin() {
   const pw = document.getElementById('pw-input').value;
   const err = document.getElementById('login-err');
   const remember = document.getElementById('remember-me').checked;
-  
   if (pw === PASS) {
-    if (remember) {
-      localStorage.setItem('kasu_admin_auth', 'true');
-    } else {
-      sessionStorage.setItem('kasu_admin_auth', 'true');
-    }
+    if (remember) localStorage.setItem('kasu_admin_auth', 'true');
+    else sessionStorage.setItem('kasu_admin_auth', 'true');
     document.getElementById('pw-input').value = '';
     checkAuth();
   } else {
@@ -483,7 +638,7 @@ function logout() {
 }
 
 // ══════════════════════════════════════════════
-// MOBILE SIDEBAR TOGGLE
+// MOBILE SIDEBAR
 // ══════════════════════════════════════════════
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -503,18 +658,13 @@ function toggleArchiveSection() {
 // ══════════════════════════════════════════════
 async function sb(path, method = 'GET', body = null) {
   const h = {
-    'apikey': SB_KEY,
-    'Authorization': `Bearer ${SB_KEY}`,
+    'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`,
     'Content-Type': 'application/json'
   };
   if (method === 'POST')   h['Prefer'] = 'return=representation';
   if (method === 'PATCH')  h['Prefer'] = 'return=minimal';
   if (method === 'DELETE') h['Prefer'] = 'return=minimal';
-
-  const res  = await fetch(`${SB_URL}/rest/v1/${path}`, {
-    method, headers: h,
-    body: body ? JSON.stringify(body) : undefined
-  });
+  const res  = await fetch(`${SB_URL}/rest/v1/${path}`, { method, headers: h, body: body ? JSON.stringify(body) : undefined });
   const text = await res.text();
   if (!res.ok) throw new Error(text || `HTTP ${res.status}`);
   return text ? JSON.parse(text) : [];
@@ -527,14 +677,19 @@ async function initAdmin() {
   try {
     products = await sb('products?select=id,name&order=id');
     const sel = document.getElementById('rv-product');
-    if (products.length) {
-      sel.innerHTML = products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
-    } else {
-      sel.innerHTML = '<option value="">No products found</option>';
-    }
+    sel.innerHTML = products.length
+      ? products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')
+      : '<option value="">No products found</option>';
   } catch(e) {
     document.getElementById('rv-product').innerHTML = '<option value="">Failed to load</option>';
   }
+
+  // Dynamically update the value hint when type changes
+  document.getElementById('cp-type').addEventListener('change', function() {
+    document.getElementById('cp-value-hint').textContent =
+      this.value === 'percent' ? 'Enter percentage (1–100)' : 'Enter amount in ₹';
+  });
+
   loadOrders();
 }
 
@@ -542,7 +697,7 @@ async function initAdmin() {
 // TAB SWITCHING
 // ══════════════════════════════════════════════
 function switchTab(name, btn) {
-  closeSidebar(); // Close sidebar on mobile after clicking
+  closeSidebar();
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
@@ -550,6 +705,7 @@ function switchTab(name, btn) {
   if (name === 'orders')   loadOrders();
   if (name === 'sessions') loadSessions();
   if (name === 'reviews')  loadReviews();
+  if (name === 'coupons')  loadCoupons();
 }
 
 // ══════════════════════════════════════════════
@@ -564,117 +720,73 @@ const STATUS_LABELS = {
 async function loadOrders() {
   setLoading('active-orders-wrap');
   document.getElementById('order-stats').innerHTML = '';
-  document.getElementById('active-order-count').textContent = '';
-  document.getElementById('archived-order-count').textContent = '';
   try {
     allOrders = await sb('orders?select=*&order=created_at.desc');
     renderOrderStats();
     renderOrderTables();
-  } catch(e) {
-    showErr('active-orders-wrap', e.message);
-  }
+  } catch(e) { showErr('active-orders-wrap', e.message); }
 }
 
 function renderOrderStats() {
-  // Only include active orders for stats
-  const activeOrders = allOrders.filter(o => !o.is_archived);
-
-  const total     = activeOrders.length;
-  const revenue   = activeOrders.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
-  const delivered = activeOrders.filter(o => o.status === 'delivered').length;
-  const pending   = activeOrders.filter(o => o.status === 'processing').length;
-
+  const active  = allOrders.filter(o => !o.is_archived);
+  const revenue = active.reduce((a, o) => a + (parseFloat(o.total) || 0), 0);
+  const delivered = active.filter(o => o.status === 'delivered').length;
+  const pending   = active.filter(o => o.status === 'processing').length;
   document.getElementById('order-stats').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Active Orders</div>
-      <div class="stat-value">${total}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Revenue (COD)</div>
-      <div class="stat-value" style="color:var(--coral)">₹${revenue.toLocaleString('en-IN')}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Delivered</div>
-      <div class="stat-value" style="color:var(--green)">${delivered}</div>
-      <div class="stat-sub">${total ? Math.round(delivered/total*100) : 0}% of active</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Processing</div>
-      <div class="stat-value" style="color:var(--yellow)">${pending}</div>
-      <div class="stat-sub">Awaiting action</div>
-    </div>`;
+    <div class="stat-card"><div class="stat-label">Active Orders</div><div class="stat-value">${active.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" style="color:var(--coral)">₹${revenue.toLocaleString('en-IN')}</div></div>
+    <div class="stat-card"><div class="stat-label">Delivered</div><div class="stat-value" style="color:var(--green)">${delivered}</div><div class="stat-sub">${active.length ? Math.round(delivered/active.length*100) : 0}% of active</div></div>
+    <div class="stat-card"><div class="stat-label">Processing</div><div class="stat-value" style="color:var(--yellow)">${pending}</div><div class="stat-sub">Awaiting action</div></div>`;
 }
 
 function filterOrders() {
   const q = document.getElementById('order-search').value.toLowerCase();
-  const filtered = q
-    ? allOrders.filter(o =>
-        (o.order_id||'').toLowerCase().includes(q) ||
-        (o.customer_name||'').toLowerCase().includes(q) ||
-        (o.mobile||'').includes(q) ||
-        (o.ip_address||'').toLowerCase().includes(q) ||
-        (o.status||'').toLowerCase().includes(q))
-    : allOrders;
+  const filtered = q ? allOrders.filter(o =>
+    (o.order_id||'').toLowerCase().includes(q) ||
+    (o.customer_name||'').toLowerCase().includes(q) ||
+    (o.mobile||'').includes(q) ||
+    (o.ip_address||'').toLowerCase().includes(q) ||
+    (o.status||'').toLowerCase().includes(q)) : allOrders;
   renderOrderTables(filtered);
 }
 
 function renderOrderTables(filtered = null) {
   const data = filtered || allOrders;
-  const activeOrders = data.filter(o => !o.is_archived);
-  const archivedOrders = data.filter(o => o.is_archived);
-  
-  document.getElementById('active-order-count').textContent = `${activeOrders.length} active`;
-  document.getElementById('archived-order-count').textContent = `${archivedOrders.length} archived`;
-  
-  document.getElementById('active-orders-wrap').innerHTML = buildOrdersHTML(activeOrders, false);
-  document.getElementById('archived-orders-wrap').innerHTML = buildOrdersHTML(archivedOrders, true);
+  const active   = data.filter(o => !o.is_archived);
+  const archived = data.filter(o => o.is_archived);
+  document.getElementById('active-order-count').textContent   = `${active.length} active`;
+  document.getElementById('archived-order-count').textContent = `${archived.length} archived`;
+  document.getElementById('active-orders-wrap').innerHTML   = buildOrdersHTML(active, false);
+  document.getElementById('archived-orders-wrap').innerHTML = buildOrdersHTML(archived, true);
 }
 
 function buildOrdersHTML(orders, isArchived) {
-  if (!orders.length) {
-    return `<div class="empty"><div class="empty-ico">${isArchived ? '🗃️' : '📦'}</div><div class="empty-txt">No ${isArchived ? 'archived' : 'active'} orders found.</div></div>`;
-  }
-  return `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Order ID</th>
-          <th>Customer</th>
-          <th>Mobile</th>
-          <th>Total</th>
-          <th>IP Address</th>
-          <th>Status</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr></thead>
-        <tbody>
-          ${orders.map(o => `
-            <tr>
-              <td>
-                <span style="font-family:monospace;color:var(--coral);font-weight:800;font-size:0.82rem">${esc(o.order_id||'—')}</span>
-              </td>
-              <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
-              <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
-              <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
-              <td style="font-family:monospace;color:var(--muted);font-size:0.8rem">${esc(o.ip_address||'—')}</td>
-              <td>
-                <select class="status-sel" onchange="updateOrderStatus(${o.id}, this.value, this)">
-                  ${STATUS_LIST.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
-                </select>
-              </td>
-              <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
-              <td style="white-space:nowrap">
-                <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="viewOrder(${o.id})">👁️ View</button>
-                ${isArchived 
-                  ? `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="toggleArchiveOrder(${o.id}, false)">📤 Unarchive</button>`
-                  : `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:6px" onclick="toggleArchiveOrder(${o.id}, true)">🗃️ Archive</button>`
-                }
-                <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
+  if (!orders.length) return `<div class="empty"><div class="empty-ico">${isArchived?'🗃️':'📦'}</div><div class="empty-txt">No ${isArchived?'archived':'active'} orders found.</div></div>`;
+  return `<div class="table-wrap"><table>
+    <thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Payment</th><th>IP Address</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+    <tbody>
+      ${orders.map(o => `<tr>
+        <td><span style="font-family:monospace;color:var(--coral);font-weight:800;font-size:0.82rem">${esc(o.order_id||'—')}</span></td>
+        <td style="font-weight:700">${esc(o.customer_name||'—')}</td>
+        <td style="color:var(--muted);font-family:monospace">${esc(o.mobile||'—')}</td>
+        <td style="font-weight:900;color:var(--green)">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</td>
+        <td><span style="font-size:0.75rem;color:var(--muted);font-weight:700">${o.payment_method==='upi'?'📲 UPI':'💵 COD'}</span></td>
+        <td style="font-family:monospace;color:var(--muted);font-size:0.8rem">${esc(o.ip_address||'—')}</td>
+        <td>
+          <select class="status-sel" onchange="updateOrderStatus(${o.id},this.value,this)">
+            ${STATUS_LIST.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
+          </select>
+        </td>
+        <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${fmtDate(o.created_at)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="viewOrder(${o.id})">👁️</button>
+          ${isArchived
+            ? `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},false)">📤</button>`
+            : `<button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="toggleArchiveOrder(${o.id},true)">🗃️</button>`}
+          <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteOrder(${o.id},'${esc(o.order_id)}')">🗑️</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table></div>`;
 }
 
 async function updateOrderStatus(id, status, sel) {
@@ -685,11 +797,8 @@ async function updateOrderStatus(id, status, sel) {
     if (o) o.status = status;
     renderOrderStats();
     showToast(`✅ Updated to "${STATUS_LABELS[status]}"`);
-  } catch(e) {
-    showToast('⚠️ Failed to update status');
-  } finally {
-    sel.disabled = false;
-  }
+  } catch(e) { showToast('⚠️ Failed to update status'); }
+  finally { sel.disabled = false; }
 }
 
 async function toggleArchiveOrder(id, archive) {
@@ -697,49 +806,32 @@ async function toggleArchiveOrder(id, archive) {
     await sb(`orders?id=eq.${id}`, 'PATCH', { is_archived: archive });
     const o = allOrders.find(x => x.id === id);
     if (o) o.is_archived = archive;
-    
-    // Automatically open the archive panel if we archive something and it's closed
-    if (archive && !document.getElementById('archived-orders-body').classList.contains('open')) {
-      toggleArchiveSection();
-    }
-    
-    // Update stats immediately
+    if (archive && !document.getElementById('archived-orders-body').classList.contains('open')) toggleArchiveSection();
     renderOrderStats();
-    // Re-render tables with current search applied
-    filterOrders(); 
-    
+    filterOrders();
     showToast(archive ? '🗃️ Order archived' : '📤 Order unarchived');
-  } catch(e) {
-    showToast('⚠️ Failed! Make sure you added the "is_archived" boolean column in Supabase.');
-    console.error(e);
-  }
+  } catch(e) { showToast('⚠️ Failed! Ensure "is_archived" column exists in Supabase.'); }
 }
 
 function viewOrder(id) {
   const o = allOrders.find(x => x.id === id); if (!o) return;
   let items = [];
-  try { items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []); } catch(e) {}
-
+  try { items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items||[]); } catch(e) {}
   document.getElementById('modal-body').innerHTML = `
     <div class="drow"><div class="dkey">Order ID</div><div class="dval" style="color:var(--coral);font-weight:900;font-family:monospace">${esc(o.order_id)}</div></div>
     <div class="drow"><div class="dkey">Customer</div><div class="dval" style="font-weight:700">${esc(o.customer_name||'—')}</div></div>
     <div class="drow"><div class="dkey">Mobile</div><div class="dval" style="font-family:monospace">${esc(o.mobile||'—')}</div></div>
     <div class="drow"><div class="dkey">Address</div><div class="dval">${esc(o.address||'—')}</div></div>
-    <div class="drow"><div class="dkey">Total</div><div class="dval" style="color:var(--green);font-weight:900">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</div></div>
+    <div class="drow"><div class="dkey">Total Paid</div><div class="dval" style="color:var(--green);font-weight:900">₹${(parseFloat(o.total)||0).toLocaleString('en-IN')}</div></div>
+    ${o.coupon_code ? `<div class="drow"><div class="dkey">Coupon Used</div><div class="dval"><span style="color:var(--coral);font-weight:800;font-family:monospace">${esc(o.coupon_code)}</span> <span style="color:var(--muted)">(-₹${(parseFloat(o.discount_amount)||0).toLocaleString('en-IN')} total discount)</span></div></div>` : ''}
+    <div class="drow"><div class="dkey">Payment</div><div class="dval">${o.payment_method==='upi'?'📲 UPI / Online':'💵 Cash on Delivery'}</div></div>
     <div class="drow"><div class="dkey">IP Address</div><div class="dval" style="font-family:monospace;color:var(--blue)">${esc(o.ip_address||'—')}</div></div>
-    <div class="drow"><div class="dkey">Payment</div><div class="dval">${esc(o.payment_method||'COD')}</div></div>
     <div class="drow"><div class="dkey">Status</div><div class="dval"><span class="badge badge-${o.status||'processing'}">${STATUS_LABELS[o.status]||o.status}</span></div></div>
-    <div class="drow"><div class="dkey">Archive Status</div><div class="dval">${o.is_archived ? '<span style="color:var(--muted)">🗃️ Archived</span>' : '<span style="color:var(--green)">📦 Active</span>'}</div></div>
+    <div class="drow"><div class="dkey">Archive</div><div class="dval">${o.is_archived?'<span style="color:var(--muted)">🗃️ Archived</span>':'<span style="color:var(--green)">📦 Active</span>'}</div></div>
     <div class="drow"><div class="dkey">Date</div><div class="dval">${fmtDate(o.created_at)}</div></div>
     <div class="drow" style="flex-direction:column;gap:8px">
-      <div class="dkey" style="margin-bottom:4px">Items Ordered</div>
-      ${items.length
-        ? items.map(i => `
-            <div class="item-chip">
-              <span>${esc(i.name||'Unknown')} <span style="color:var(--muted)">× ${i.qty||1}</span></span>
-              <span class="item-chip-price">₹${((i.price||0)*(i.qty||1)).toLocaleString('en-IN')}</span>
-            </div>`).join('')
-        : '<div style="color:var(--muted);font-size:0.85rem">No item details</div>'}
+      <div class="dkey" style="margin-bottom:4px">Items</div>
+      ${items.length ? items.map(i=>`<div class="item-chip"><span>${esc(i.name||'Unknown')} <span style="color:var(--muted)">× ${i.qty||1}</span>${i.variant?` <span style="color:var(--muted);font-size:0.78em;">(${esc(i.variant)})</span>`:''}</span><span class="item-chip-price">₹${((i.price||0)*(i.qty||1)).toLocaleString('en-IN')}</span></div>`).join('') : '<div style="color:var(--muted);font-size:0.85rem">No item details</div>'}
     </div>`;
   document.getElementById('order-modal').classList.add('show');
 }
@@ -749,13 +841,10 @@ async function deleteOrder(id, oid) {
   try {
     await sb(`orders?id=eq.${id}`, 'DELETE');
     allOrders = allOrders.filter(o => o.id !== id);
-    renderOrderStats();
-    filterOrders();
+    renderOrderStats(); filterOrders();
     showToast('🗑️ Order deleted');
-  } catch(e) { showToast('⚠️ Failed to delete: ' + e.message); }
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
-
-function closeModal() { document.getElementById('order-modal').classList.remove('show'); }
 
 // ══════════════════════════════════════════════
 // ██ SESSIONS
@@ -767,49 +856,28 @@ async function loadSessions() {
     allSessions = await sb('session?select=*&order=date.desc');
     renderSessionStats();
     renderSessionGroups(allSessions);
-  } catch(e) {
-    showErr('sessions-wrap', e.message);
-  }
+  } catch(e) { showErr('sessions-wrap', e.message); }
 }
 
 function filterSessions() {
   const q = document.getElementById('session-search').value.toLowerCase();
-  const filtered = q 
-    ? allSessions.filter(s => 
-        (s.ip_address || '').toLowerCase().includes(q) ||
-        (s.device || '').toLowerCase().includes(q) ||
-        (s.session_id || '').toLowerCase().includes(q)
-      )
-    : allSessions;
+  const filtered = q ? allSessions.filter(s =>
+    (s.ip_address||'').toLowerCase().includes(q) ||
+    (s.device||'').toLowerCase().includes(q) ||
+    (s.session_id||'').toLowerCase().includes(q)) : allSessions;
   renderSessionGroups(filtered);
 }
 
 function renderSessionStats() {
-  const total   = allSessions.length;
-  const carted  = allSessions.filter(s => s.added_cart).length;
-  const mobile  = allSessions.filter(s => s.device === 'Mobile').length;
-  const uniqueIPs = new Set(allSessions.map(s => s.ip_address || 'Unknown')).size;
-  const cvr     = total ? Math.round(carted / total * 100) : 0;
-
+  const total = allSessions.length;
+  const carted = allSessions.filter(s => s.added_cart).length;
+  const mobile = allSessions.filter(s => s.device === 'Mobile').length;
+  const uniqueIPs = new Set(allSessions.map(s => s.ip_address||'Unknown')).size;
   document.getElementById('session-stats').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Total Sessions</div>
-      <div class="stat-value">${total}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Added to Cart</div>
-      <div class="stat-value" style="color:var(--coral)">${carted}</div>
-      <div class="stat-sub">${cvr}% conversion rate</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Unique IPs</div>
-      <div class="stat-value" style="color:var(--blue)">${uniqueIPs}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Mobile Users</div>
-      <div class="stat-value" style="color:var(--green)">${mobile}</div>
-      <div class="stat-sub">${total ? Math.round(mobile/total*100) : 0}% of sessions</div>
-    </div>`;
+    <div class="stat-card"><div class="stat-label">Total Sessions</div><div class="stat-value">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Added to Cart</div><div class="stat-value" style="color:var(--coral)">${carted}</div><div class="stat-sub">${total?Math.round(carted/total*100):0}% conversion</div></div>
+    <div class="stat-card"><div class="stat-label">Unique IPs</div><div class="stat-value" style="color:var(--blue)">${uniqueIPs}</div></div>
+    <div class="stat-card"><div class="stat-label">Mobile Users</div><div class="stat-value" style="color:var(--green)">${mobile}</div><div class="stat-sub">${total?Math.round(mobile/total*100):0}% of sessions</div></div>`;
 }
 
 function renderSessionGroups(sessionsToRender) {
@@ -817,86 +885,53 @@ function renderSessionGroups(sessionsToRender) {
     document.getElementById('sessions-wrap').innerHTML = '<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No matching sessions found.</div></div>';
     return;
   }
-
-  // Group by IP address
   const groups = {};
-  sessionsToRender.forEach(s => {
-    const key = s.ip_address || 'Unknown';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(s);
-  });
-
-  // Sort groups: most sessions first
-  const sorted = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
-
+  sessionsToRender.forEach(s => { const key = s.ip_address||'Unknown'; if (!groups[key]) groups[key]=[]; groups[key].push(s); });
+  const sorted = Object.entries(groups).sort((a,b) => b[1].length - a[1].length);
   document.getElementById('sessions-wrap').innerHTML = sorted.map(([ip, sessions]) => {
-    const safeId  = 'g_' + ip.replace(/[.\s]/g, '_');
-    const devices = [...new Set(sessions.map(s => s.device).filter(Boolean))];
-    const carted  = sessions.filter(s => s.added_cart).length;
+    const safeId = 'g_' + ip.replace(/[.\s]/g,'_');
+    const devices = [...new Set(sessions.map(s=>s.device).filter(Boolean))];
+    const carted  = sessions.filter(s=>s.added_cart).length;
     const latest  = sessions[0]?.date;
-
-    return `
-      <div class="ip-group">
-        <div class="ip-group-hdr" onclick="toggleGroup('${safeId}')">
-          <div class="ip-left">
-            <span class="ip-address">${esc(ip)}</span>
-            <div class="ip-meta">
-              <span>🖥️ ${sessions.length} session${sessions.length !== 1 ? 's' : ''}</span>
-              ${devices.length ? `<span>📱 ${devices.join(', ')}</span>` : ''}
-              ${carted ? `<span style="color:var(--coral)">🛒 ${carted} added to cart</span>` : ''}
-              ${latest ? `<span>🕒 ${fmtDate(latest)}</span>` : ''}
-            </div>
-          </div>
-          <div class="ip-right">
-            <button class="btn btn-danger" style="padding:6px 12px;font-size:0.75rem"
-              onclick="event.stopPropagation();deleteIPGroup('${ip}')">
-              🗑️ Delete All
-            </button>
-            <span class="ip-chevron" id="chev-${safeId}">▼</span>
+    return `<div class="ip-group">
+      <div class="ip-group-hdr" onclick="toggleGroup('${safeId}')">
+        <div class="ip-left">
+          <span class="ip-address">${esc(ip)}</span>
+          <div class="ip-meta">
+            <span>🖥️ ${sessions.length} session${sessions.length!==1?'s':''}</span>
+            ${devices.length?`<span>📱 ${devices.join(', ')}</span>`:''}
+            ${carted?`<span style="color:var(--coral)">🛒 ${carted} added to cart</span>`:''}
+            ${latest?`<span>🕒 ${fmtDate(latest)}</span>`:''}
           </div>
         </div>
-        <div class="ip-sessions" id="${safeId}">
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th>Session ID</th>
-                <th>Device</th>
-                <th>Time Spent</th>
-                <th>Cart</th>
-                <th>Date</th>
-                <th>Delete</th>
-              </tr></thead>
-              <tbody>
-                ${sessions.map(s => {
-                  const dev = (s.device || 'unknown').toLowerCase();
-                  return `<tr>
-                    <td style="font-family:monospace;font-size:0.72rem;color:var(--muted)">
-                      ${(s.session_id || '—').toString().substring(0, 18)}…
-                    </td>
-                    <td><span class="badge badge-${dev}">${s.device || 'Unknown'}</span></td>
-                    <td style="color:var(--blue);font-weight:800">${s.time_spent || '0s'}</td>
-                    <td>${s.added_cart
-                      ? '<span style="color:var(--coral);font-weight:800">🛒 Yes</span>'
-                      : '<span style="color:var(--muted)">No</span>'}</td>
-                    <td style="color:var(--muted);font-size:0.75rem;white-space:nowrap">${s.date ? fmtDate(s.date) : '—'}</td>
-                    <td>
-                      <button class="btn btn-danger" style="padding:5px 10px;font-size:0.75rem"
-                        onclick="deleteOneSession(${s.id})">🗑️</button>
-                    </td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
+        <div class="ip-right">
+          <button class="btn btn-danger" style="padding:6px 12px;font-size:0.75rem" onclick="event.stopPropagation();deleteIPGroup('${ip}')">🗑️ Delete All</button>
+          <span class="ip-chevron" id="chev-${safeId}">▼</span>
         </div>
-      </div>`;
+      </div>
+      <div class="ip-sessions" id="${safeId}">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Session ID</th><th>Device</th><th>Time Spent</th><th>Cart</th><th>Date</th><th>Delete</th></tr></thead>
+          <tbody>${sessions.map(s => {
+            const dev = (s.device||'unknown').toLowerCase();
+            return `<tr>
+              <td style="font-family:monospace;font-size:0.72rem;color:var(--muted)">${(s.session_id||'—').toString().substring(0,18)}…</td>
+              <td><span class="badge badge-${dev}">${s.device||'Unknown'}</span></td>
+              <td style="color:var(--blue);font-weight:800">${s.time_spent||'0s'}</td>
+              <td>${s.added_cart?'<span style="color:var(--coral);font-weight:800">🛒 Yes</span>':'<span style="color:var(--muted)">No</span>'}</td>
+              <td style="color:var(--muted);font-size:0.75rem;white-space:nowrap">${s.date?fmtDate(s.date):'—'}</td>
+              <td><button class="btn btn-danger" style="padding:5px 10px;font-size:0.75rem" onclick="deleteOneSession(${s.id})">🗑️</button></td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>`;
   }).join('');
 }
 
 function toggleGroup(id) {
-  const el   = document.getElementById(id);
+  document.getElementById(id).classList.toggle('open');
   const chev = document.getElementById('chev-' + id);
-  el.classList.toggle('open');
   if (chev) chev.classList.toggle('open');
 }
 
@@ -904,21 +939,19 @@ async function deleteOneSession(id) {
   try {
     await sb(`session?id=eq.${id}`, 'DELETE');
     allSessions = allSessions.filter(s => s.id !== id);
-    renderSessionStats();
-    filterSessions(); // Keeps search filter applied
+    renderSessionStats(); filterSessions();
     showToast('🗑️ Session deleted');
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
 
 async function deleteIPGroup(ip) {
-  const group = allSessions.filter(s => (s.ip_address || 'Unknown') === ip);
+  const group = allSessions.filter(s => (s.ip_address||'Unknown') === ip);
   if (!confirm(`Delete all ${group.length} session(s) from ${ip}?`)) return;
   try {
     const ids = group.map(s => s.id).join(',');
     await sb(`session?id=in.(${ids})`, 'DELETE');
-    allSessions = allSessions.filter(s => (s.ip_address || 'Unknown') !== ip);
-    renderSessionStats();
-    filterSessions(); // Keeps search filter applied
+    allSessions = allSessions.filter(s => (s.ip_address||'Unknown') !== ip);
+    renderSessionStats(); filterSessions();
     showToast(`🗑️ Deleted ${group.length} sessions from ${ip}`);
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -927,13 +960,11 @@ async function deleteAllSessions() {
   if (!allSessions.length) { showToast('No sessions to delete'); return; }
   if (!confirm(`Delete ALL ${allSessions.length} sessions?\n\nThis cannot be undone.`)) return;
   try {
-    // Delete in batches using all IDs
     const ids = allSessions.map(s => s.id).join(',');
     await sb(`session?id=in.(${ids})`, 'DELETE');
     allSessions = [];
     document.getElementById('session-search').value = '';
-    renderSessionStats();
-    renderSessionGroups([]);
+    renderSessionStats(); renderSessionGroups([]);
     showToast('🗑️ All sessions deleted');
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -947,9 +978,7 @@ async function loadReviews() {
   try {
     allReviews = await sb('reviews?select=*&order=id.desc');
     renderReviewsTable();
-  } catch(e) {
-    showErr('reviews-wrap', e.message);
-  }
+  } catch(e) { showErr('reviews-wrap', e.message); }
 }
 
 function renderReviewsTable() {
@@ -958,65 +987,40 @@ function renderReviewsTable() {
     document.getElementById('reviews-wrap').innerHTML = '<div class="empty"><div class="empty-ico">⭐</div><div class="empty-txt">No reviews yet. Add one above!</div></div>';
     return;
   }
-  document.getElementById('reviews-wrap').innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Product</th>
-          <th>Name</th>
-          <th>Rating</th>
-          <th>Review</th>
-          <th>Verified</th>
-          <th>Date</th>
-          <th>Delete</th>
-        </tr></thead>
-        <tbody>
-          ${allReviews.map(r => {
-            const pName = products.find(p => p.id === r.product_id)?.name || `Product #${r.product_id}`;
-            const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
-            return `<tr>
-              <td style="font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pName)}">${esc(pName)}</td>
-              <td style="font-weight:700;white-space:nowrap">${esc(r.name || '—')}</td>
-              <td style="white-space:nowrap">
-                <span style="color:var(--yellow);font-size:0.85rem">${stars}</span>
-                <span style="color:var(--muted);font-size:0.78rem;margin-left:4px">${r.rating}/5</span>
-              </td>
-              <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:0.83rem" title="${esc(r.text||'')}">
-                ${esc(r.text || '—')}
-              </td>
-              <td>${r.verified
-                ? '<span style="color:var(--green);font-weight:800">✅ Yes</span>'
-                : '<span style="color:var(--muted)">No</span>'}</td>
-              <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${r.created_at ? fmtDate(r.created_at) : '—'}</td>
-              <td>
-                <button class="btn btn-danger" style="padding:6px 12px;font-size:0.78rem"
-                  onclick="deleteReview(${r.id})">🗑️ Delete</button>
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>`;
+  document.getElementById('reviews-wrap').innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Product</th><th>Name</th><th>Rating</th><th>Review</th><th>Photo</th><th>Verified</th><th>Date</th><th>Delete</th></tr></thead>
+    <tbody>${allReviews.map(r => {
+      const pName = products.find(p => p.id === r.product_id)?.name || `Product #${r.product_id}`;
+      const stars = '★'.repeat(r.rating||5) + '☆'.repeat(5-(r.rating||5));
+      return `<tr>
+        <td style="font-weight:700;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pName)}">${esc(pName)}</td>
+        <td style="font-weight:700;white-space:nowrap">${esc(r.name||'—')}</td>
+        <td style="white-space:nowrap"><span style="color:var(--yellow);font-size:0.85rem">${stars}</span> <span style="color:var(--muted);font-size:0.78rem">${r.rating}/5</span></td>
+        <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:0.83rem" title="${esc(r.text||'')}">${esc(r.text||'—')}</td>
+        <td>${r.image_url ? `<img src="${r.image_url}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;border:1px solid var(--border);cursor:pointer" onclick="window.open(this.src,'_blank')" title="View photo">` : '<span style="color:var(--muted);font-size:0.75rem">None</span>'}</td>
+        <td>${r.verified?'<span style="color:var(--green);font-weight:800">✅ Yes</span>':'<span style="color:var(--muted)">No</span>'}</td>
+        <td style="color:var(--muted);font-size:0.78rem;white-space:nowrap">${r.created_at?fmtDate(r.created_at):'—'}</td>
+        <td><button class="btn btn-danger" style="padding:6px 12px;font-size:0.78rem" onclick="deleteReview(${r.id})">🗑️</button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
 }
 
 async function addReview() {
-  const pid      = parseInt(document.getElementById('rv-product').value);
-  const name     = document.getElementById('rv-name').value.trim();
-  const rating   = parseInt(document.getElementById('rv-rating').value);
-  const text     = document.getElementById('rv-text').value.trim();
+  const pid = parseInt(document.getElementById('rv-product').value);
+  const name = document.getElementById('rv-name').value.trim();
+  const rating = parseInt(document.getElementById('rv-rating').value);
+  const text = document.getElementById('rv-text').value.trim();
   const verified = document.getElementById('rv-verified').checked;
-
   if (!pid)  { showToast('⚠️ Select a product'); return; }
   if (!name) { showToast('⚠️ Enter reviewer name'); return; }
   if (!text) { showToast('⚠️ Enter review text'); return; }
-
   try {
     await sb('reviews', 'POST', { product_id: pid, name, rating, text, verified });
-    document.getElementById('rv-name').value  = '';
-    document.getElementById('rv-text').value  = '';
+    document.getElementById('rv-name').value = '';
+    document.getElementById('rv-text').value = '';
     document.getElementById('rv-rating').value = '5';
     document.getElementById('rv-verified').checked = true;
-    showToast('✅ Review added successfully!');
+    showToast('✅ Review added!');
     await loadReviews();
   } catch(e) { showToast('⚠️ Failed: ' + e.message); }
 }
@@ -1032,8 +1036,242 @@ async function deleteReview(id) {
 }
 
 // ══════════════════════════════════════════════
+// ██ COUPONS
+// ══════════════════════════════════════════════
+async function loadCoupons() {
+  setLoading('coupons-wrap');
+  document.getElementById('coupon-stats').innerHTML = '';
+  document.getElementById('coupon-count').textContent = '';
+  try {
+    allCoupons = await sb('coupons?select=*&order=id.desc');
+    renderCouponStats();
+    renderCouponsTable();
+  } catch(e) { showErr('coupons-wrap', e.message); }
+}
+
+function renderCouponStats() {
+  const total   = allCoupons.length;
+  const active  = allCoupons.filter(c => c.active).length;
+  const expired = allCoupons.filter(c => c.expires_at && new Date(c.expires_at) < new Date()).length;
+  const totalUses = allCoupons.reduce((a, c) => a + (c.used_count || 0), 0);
+  document.getElementById('coupon-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total Coupons</div><div class="stat-value">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Active Coupons</div><div class="stat-value" style="color:var(--green)">${active}</div><div class="stat-sub">${total?Math.round(active/total*100):0}% of all codes</div></div>
+    <div class="stat-card"><div class="stat-label">Total Uses</div><div class="stat-value" style="color:var(--coral)">${totalUses}</div><div class="stat-sub">Across all coupons</div></div>
+    <div class="stat-card"><div class="stat-label">Expired</div><div class="stat-value" style="color:var(--red)">${expired}</div><div class="stat-sub">Past expiry date</div></div>`;
+}
+
+function renderCouponsTable() {
+  document.getElementById('coupon-count').textContent = `${allCoupons.length} coupons`;
+  if (!allCoupons.length) {
+    document.getElementById('coupons-wrap').innerHTML = '<div class="empty"><div class="empty-ico">🏷️</div><div class="empty-txt">No coupons yet. Create one above!</div></div>';
+    return;
+  }
+  document.getElementById('coupons-wrap').innerHTML = `<div class="table-wrap"><table>
+    <thead><tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Discount</th>
+      <th>Min Order</th>
+      <th>Usage</th>
+      <th>Expiry</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr></thead>
+    <tbody>
+      ${allCoupons.map(c => {
+        const isExpired = c.expires_at && new Date(c.expires_at) < new Date();
+        const usageDisplay = c.max_uses
+          ? `${c.used_count||0} / ${c.max_uses}`
+          : `${c.used_count||0} / ∞`;
+        const usagePct = c.max_uses ? Math.round((c.used_count||0) / c.max_uses * 100) : 0;
+        const usageColor = usagePct >= 90 ? 'var(--red)' : usagePct >= 60 ? 'var(--yellow)' : 'var(--green)';
+
+        return `<tr>
+          <td>
+            <span style="font-family:monospace;font-weight:900;font-size:0.9rem;color:var(--yellow);background:rgba(247,183,49,0.1);padding:4px 10px;border-radius:6px;">
+              ${esc(c.code)}
+            </span>
+          </td>
+          <td style="color:var(--muted);font-size:0.83rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(c.description||'')}">
+            ${esc(c.description||'—')}
+          </td>
+          <td>
+            <span class="badge badge-${c.discount_type}">
+              ${c.discount_type === 'percent' ? `${c.discount_value}% OFF` : `₹${c.discount_value} OFF`}
+            </span>
+          </td>
+          <td style="font-size:0.83rem;color:var(--muted)">
+            ${c.min_order > 0 ? `₹${parseFloat(c.min_order).toLocaleString('en-IN')}` : '<span style="color:var(--muted)">None</span>'}
+          </td>
+          <td>
+            <span style="font-weight:800;color:${usageColor};font-size:0.85rem">${usageDisplay}</span>
+            ${c.max_uses ? `<div style="font-size:0.7rem;color:var(--muted);margin-top:2px">${usagePct}% used</div>` : ''}
+          </td>
+          <td style="font-size:0.78rem;white-space:nowrap">
+            ${c.expires_at
+              ? isExpired
+                ? `<span class="badge badge-expired">⚠️ Expired</span><div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${fmtDateShort(c.expires_at)}</div>`
+                : `<span style="color:var(--green);font-size:0.8rem;">✅ ${fmtDateShort(c.expires_at)}</span>`
+              : '<span style="color:var(--muted)">Never</span>'}
+          </td>
+          <td>
+            <button class="toggle-pill ${c.active ? 'on' : 'off'}" onclick="toggleCouponActive(${c.id}, ${c.active})">
+              ${c.active ? '🟢 Active' : '⚪ Inactive'}
+            </button>
+          </td>
+          <td style="white-space:nowrap">
+            <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="openEditCoupon(${c.id})">✏️ Edit</button>
+            <button class="btn btn-warning" style="padding:6px 10px;font-size:0.78rem;margin-right:4px" onclick="resetCouponUses(${c.id}, '${esc(c.code)}')">🔄</button>
+            <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem" onclick="deleteCoupon(${c.id}, '${esc(c.code)}')">🗑️</button>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody></table></div>`;
+}
+
+async function createCoupon() {
+  const code  = document.getElementById('cp-code').value.trim().toUpperCase();
+  const desc  = document.getElementById('cp-desc').value.trim();
+  const type  = document.getElementById('cp-type').value;
+  const value = parseFloat(document.getElementById('cp-value').value);
+  const min   = parseFloat(document.getElementById('cp-min').value) || 0;
+  const maxU  = parseInt(document.getElementById('cp-maxuses').value) || null;
+  const exp   = document.getElementById('cp-expires').value || null;
+  const active = document.getElementById('cp-active').checked;
+
+  if (!code)        { showToast('⚠️ Enter a coupon code'); return; }
+  if (isNaN(value) || value <= 0) { showToast('⚠️ Enter a valid discount value'); return; }
+  if (type === 'percent' && value > 100) { showToast('⚠️ Percent discount cannot exceed 100'); return; }
+
+  try {
+    await sb('coupons', 'POST', {
+      code, description: desc || null,
+      discount_type: type, discount_value: value,
+      min_order: min, max_uses: maxU,
+      expires_at: exp ? new Date(exp).toISOString() : null,
+      active, used_count: 0
+    });
+    // Reset form
+    document.getElementById('cp-code').value    = '';
+    document.getElementById('cp-desc').value    = '';
+    document.getElementById('cp-value').value   = '';
+    document.getElementById('cp-min').value     = '0';
+    document.getElementById('cp-maxuses').value = '';
+    document.getElementById('cp-expires').value = '';
+    document.getElementById('cp-active').checked = true;
+    document.getElementById('cp-type').value    = 'flat';
+    document.getElementById('cp-value-hint').textContent = 'Enter amount in ₹';
+    showToast(`✅ Coupon "${code}" created!`);
+    await loadCoupons();
+  } catch(e) {
+    if (e.message.includes('unique') || e.message.includes('duplicate')) {
+      showToast(`⚠️ Coupon code "${code}" already exists`);
+    } else {
+      showToast('⚠️ Failed: ' + e.message);
+    }
+  }
+}
+
+async function toggleCouponActive(id, currentActive) {
+  try {
+    await sb(`coupons?id=eq.${id}`, 'PATCH', { active: !currentActive });
+    const c = allCoupons.find(x => x.id === id);
+    if (c) c.active = !currentActive;
+    renderCouponStats();
+    renderCouponsTable();
+    showToast(!currentActive ? '✅ Coupon activated' : '⚪ Coupon deactivated');
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+async function resetCouponUses(id, code) {
+  if (!confirm(`Reset usage count for "${code}" back to 0?`)) return;
+  try {
+    await sb(`coupons?id=eq.${id}`, 'PATCH', { used_count: 0 });
+    const c = allCoupons.find(x => x.id === id);
+    if (c) c.used_count = 0;
+    renderCouponsTable();
+    showToast(`🔄 Usage count reset for "${code}"`);
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+function openEditCoupon(id) {
+  const c = allCoupons.find(x => x.id === id); if (!c) return;
+  document.getElementById('edit-cp-id').value      = c.id;
+  document.getElementById('edit-cp-code').value    = c.code;
+  document.getElementById('edit-cp-desc').value    = c.description || '';
+  document.getElementById('edit-cp-type').value    = c.discount_type || 'flat';
+  document.getElementById('edit-cp-value').value   = c.discount_value;
+  document.getElementById('edit-cp-min').value     = c.min_order || 0;
+  document.getElementById('edit-cp-maxuses').value = c.max_uses || '';
+  document.getElementById('edit-cp-active').checked = !!c.active;
+
+  // Convert UTC to local datetime-local format for the input
+  if (c.expires_at) {
+    const d = new Date(c.expires_at);
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+    document.getElementById('edit-cp-expires').value = local;
+  } else {
+    document.getElementById('edit-cp-expires').value = '';
+  }
+
+  document.getElementById('coupon-modal').classList.add('show');
+}
+
+async function saveEditCoupon() {
+  const id    = parseInt(document.getElementById('edit-cp-id').value);
+  const code  = document.getElementById('edit-cp-code').value.trim().toUpperCase();
+  const desc  = document.getElementById('edit-cp-desc').value.trim();
+  const type  = document.getElementById('edit-cp-type').value;
+  const value = parseFloat(document.getElementById('edit-cp-value').value);
+  const min   = parseFloat(document.getElementById('edit-cp-min').value) || 0;
+  const maxU  = parseInt(document.getElementById('edit-cp-maxuses').value) || null;
+  const exp   = document.getElementById('edit-cp-expires').value || null;
+  const active = document.getElementById('edit-cp-active').checked;
+
+  if (!code)         { showToast('⚠️ Enter a coupon code'); return; }
+  if (isNaN(value) || value <= 0) { showToast('⚠️ Enter a valid discount value'); return; }
+  if (type === 'percent' && value > 100) { showToast('⚠️ Percent cannot exceed 100'); return; }
+
+  try {
+    await sb(`coupons?id=eq.${id}`, 'PATCH', {
+      code, description: desc || null,
+      discount_type: type, discount_value: value,
+      min_order: min, max_uses: maxU,
+      expires_at: exp ? new Date(exp).toISOString() : null,
+      active
+    });
+    const c = allCoupons.find(x => x.id === id);
+    if (c) Object.assign(c, { code, description: desc||null, discount_type: type, discount_value: value, min_order: min, max_uses: maxU, expires_at: exp ? new Date(exp).toISOString() : null, active });
+    closeModal('coupon-modal');
+    renderCouponStats();
+    renderCouponsTable();
+    showToast(`✅ Coupon "${code}" updated!`);
+  } catch(e) {
+    if (e.message.includes('unique') || e.message.includes('duplicate')) {
+      showToast(`⚠️ Code "${code}" already used by another coupon`);
+    } else {
+      showToast('⚠️ Failed: ' + e.message);
+    }
+  }
+}
+
+async function deleteCoupon(id, code) {
+  if (!confirm(`Delete coupon "${code}"?\n\nThis cannot be undone.`)) return;
+  try {
+    await sb(`coupons?id=eq.${id}`, 'DELETE');
+    allCoupons = allCoupons.filter(c => c.id !== id);
+    renderCouponStats();
+    renderCouponsTable();
+    showToast(`🗑️ Coupon "${code}" deleted`);
+  } catch(e) { showToast('⚠️ Failed: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -1041,12 +1279,12 @@ function fmtDate(iso) {
   if (!iso) return '—';
   return new Date(iso).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 }
-function setLoading(id) {
-  document.getElementById(id).innerHTML = '<div class="loader-wrap"><div class="spinner"></div>Loading…</div>';
+function fmtDateShort(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
 }
-function showErr(id, msg) {
-  document.getElementById(id).innerHTML = `<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">Error: ${esc(msg)}</div></div>`;
-}
+function setLoading(id) { document.getElementById(id).innerHTML = '<div class="loader-wrap"><div class="spinner"></div>Loading…</div>'; }
+function showErr(id, msg) { document.getElementById(id).innerHTML = `<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">Error: ${esc(msg)}</div></div>`; }
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
