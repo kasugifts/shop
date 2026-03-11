@@ -4,6 +4,7 @@
 <head>
   <!-- Meta Pixel Code -->
   <script>
+
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
@@ -26,6 +27,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kasu Gifts</title>
   <style>
+	.custom-upload-wrap { background: #fff8f3; border: 2px dashed #f0d8c8; padding: 18px; border-radius: var(--radius); margin-bottom: 20px; text-align: center; }
+.custom-upload-wrap h4 { font-size: 0.95rem; font-weight: 800; color: var(--coral); margin-bottom: 6px; }
+.custom-upload-wrap p { font-size: 0.8rem; color: var(--mid); margin-bottom: 14px; }
+.custom-img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.custom-img-thumb { width: 100%; aspect-ratio: 1; border-radius: 8px; object-fit: cover; border: 2px solid var(--peach); }
+.upload-btn-styled { background: white; border: 1.5px solid var(--coral); color: var(--coral); padding: 10px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
+.upload-btn-styled:hover { background: var(--coral); color: white; }
     :root {
       --cream: #f9efe3;
       --peach: #f6c6ab;
@@ -437,9 +445,9 @@
   <script>
     const SB_URL = 'https://aawhuykfhjsjtwrstnvt.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk';
-
+let tempCustomImages = [];
     const DEFAULT_DESC = `The **Love Pearl Oyster Gift Set** is the ultimate romantic surprise — a real freshwater Pearl hidden inside a live oyster, beautifully presented in a heart-shaped velvet jewel box. 💕
-
+	let selectedPayment = 'cod';
 ✨ Real Freshwater Pearl — authentic & unique, nature's own surprise
 💝 Heart-Shaped Velvet Jewelry Box — luxurious black velvet display included
 📿 Silver Cage Pendant & Chain — wear your pearl immediately after unboxing
@@ -479,7 +487,39 @@
       if (/Mobile|iPhone|Android|BlackBerry|IEMobile/i.test(ua)) return 'Mobile';
       return 'Desktop';
     }
-
+async function processCustomImages(input) {
+  const files = Array.from(input.files);
+  if (files.length !== 6) {
+    showToast('⚠️ Please select exactly 6 photos.');
+    input.value = '';
+    return;
+  }
+  
+  showToast('⏳ Processing images... Please wait.');
+  const grid = document.getElementById('custom-img-grid');
+  grid.innerHTML = '<div class="loader" style="width:24px;height:24px;border-width:2px;margin:10px auto;"></div>';
+  
+  tempCustomImages = [];
+  for (let file of files) {
+     try {
+       // Compress to 600px to ensure the database payload isn't too large
+       const compressed = await compressImage(file, 600); 
+       tempCustomImages.push(compressed);
+     } catch(e) {
+       console.error('Image compression failed', e);
+     }
+  }
+  
+  if (tempCustomImages.length === 6) {
+    grid.innerHTML = tempCustomImages.map(src => `<img src="${src}" class="custom-img-thumb">`).join('');
+    showToast('✅ 6 photos uploaded successfully!');
+  } else {
+    grid.innerHTML = '';
+    tempCustomImages = [];
+    input.value = '';
+    showToast('⚠️ Error processing images. Please try again.');
+  }
+}
     async function sb(path, method = 'GET', body = null) {
       const h = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
       if (method === 'POST') h['Prefer'] = 'return=representation';
@@ -496,7 +536,7 @@
     }
 
     let products = [], checkoutAddress = null, checkoutStep = 1;
-    let selectedPayment = 'cod';
+    
     let countdownTarget = 0, timerInterval = null, pickedRating = 5;
     let cart = store.get('kasu_cart', []);
     let orderIds = store.get('kasu_orders', []);
@@ -721,10 +761,10 @@
       }
       if (buyBtn) buyBtn.textContent = `Buy Now — Only ₹${effectivePrice.toLocaleString('en-IN')}! 🎁`;
     }
-
-    async function openProduct(id) {
+       async function openProduct(id) {
       pickedRating = 5;
       const p = products.find(x => x.id === id); if (!p) return;
+      tempCustomImages = []; // Reset on new product open
 
       if (p.variants && p.variants.length && selectedVariants[p.id] == null) {
         selectedVariants[p.id] = 0;
@@ -743,6 +783,9 @@
       const thumbs = imgs.length > 1
         ? imgs.map((u, i) => `<div class="thumb-item ${i === 0 ? 'active' : ''}" onclick="goSlide(${i},this)"><img src="${u}"></div>`).join('')
         : '';
+
+      // Safely check if custom is boolean true or text "true"
+      const isCustom = (p.custom === true || String(p.custom).toLowerCase() === 'true');
 
       document.getElementById('page-detail').innerHTML = `
         <div class="detail-wrap">
@@ -768,6 +811,16 @@
                 <span id="det-count">${p.rating || 5} (${p.review_count || 0} reviews)</span>
               </div>
               ${renderVariantSelector(p)}
+              
+              ${isCustom ? `
+              <div class="custom-upload-wrap">
+                <h4>📸 Custom Product (Requires 6 Photos)</h4>
+                <p>Please select exactly 6 photos to customize your gift.</p>
+                <button type="button" class="upload-btn-styled" onclick="document.getElementById('custom-file-input').click()">Select 6 Photos</button>
+                <input type="file" id="custom-file-input" multiple accept="image/*" style="display:none" onchange="processCustomImages(this)">
+                <div class="custom-img-grid" id="custom-img-grid"></div>
+              </div>` : ''}
+
               <div class="price-card">
                 <div class="price-main" id="det-price-main">₹${effectivePrice.toLocaleString('en-IN')}</div>
                 <div class="price-sub">
@@ -786,7 +839,7 @@
               <button class="btn-primary" id="det-buy-btn" onclick="buyNow(${p.id})">
                 Buy Now — Only ₹${effectivePrice.toLocaleString('en-IN')}! 🎁
               </button>
-              <button class="btn-secondary" onclick="addToCart(${p.id});openCart()">🛒 Add to Cart</button>
+              <button class="btn-secondary" onclick="addToCart(${p.id})">🛒 Add to Cart</button>
             </div>
           </div>
           <div class="product-content-stack">
@@ -809,6 +862,215 @@
       loadReviews(id);
     }
 
+      function addToCart(pid) {
+      const p = products.find(x => x.id === pid); if (!p) return;
+      const isCustom = (p.custom === true || String(p.custom).toLowerCase() === 'true');
+      
+      if (isCustom && tempCustomImages.length !== 6) {
+        showToast('⚠️ Please upload exactly 6 photos for this custom product.');
+        return;
+      }
+
+      fireCartAdded();
+      const variant    = getActiveVariant(p);
+      const price      = variant ? variant.price : p.price;
+      const variantKey = variant ? `${pid}_${variant.label}` : `${pid}`;
+
+      const ex = cart.find(c => String(c.cart_key) === String(variantKey));
+      if (ex) {
+        ex.qty++;
+        if (isCustom) ex.custom_images = [...tempCustomImages]; 
+      } else {
+        cart.push({
+          cart_key:    variantKey,
+          product_id:  p.id,
+          name:        p.name,
+          price:       price,
+          emoji:       p.emoji || '🎁',
+          image_url:   p.image_url || '',
+          qty:         1,
+          variant:     variant ? variant.label : null,
+          custom_images: isCustom ? [...tempCustomImages] : null
+        });
+      }
+      
+      tempCustomImages = []; // Clear memory
+      if (document.getElementById('custom-img-grid')) document.getElementById('custom-img-grid').innerHTML = '';
+      if (document.getElementById('custom-file-input')) document.getElementById('custom-file-input').value = '';
+
+      saveCart(); updateBadge(); openCart();
+    }
+
+        function buyNow(pid) {
+      const p = products.find(x => x.id === pid); if (!p) return;
+      const isCustom = (p.custom === true || String(p.custom).toLowerCase() === 'true');
+
+      if (isCustom && tempCustomImages.length !== 6) {
+        showToast('⚠️ Please upload exactly 6 photos for this custom product.');
+        return;
+      }
+
+      const variant = getActiveVariant(p);
+      const price   = variant ? variant.price : p.price;
+      buyNowItem = {
+        cart_key:   variant ? `${pid}_${variant.label}` : `${pid}`,
+        product_id: p.id,
+        name:       p.name,
+        price:      price,
+        emoji:      p.emoji || '🎁',
+        image_url:  p.image_url || '',
+        qty:        1,
+        variant:    variant ? variant.label : null,
+        custom_images: isCustom ? [...tempCustomImages] : null
+      };
+
+      tempCustomImages = []; // Clear memory
+
+      closeAll();
+      checkoutStep = 1;
+      appliedCoupon = null; 
+      renderCheckout();
+      openPanel('checkout-panel');
+    }
+
+    function openCart() { closeAll(); renderCart(); openPanel('cart-panel'); }
+
+    function renderCart() {
+      const body = document.getElementById('cart-body'), foot = document.getElementById('cart-foot');
+      if (!cart.length) {
+        body.innerHTML = `<div class="cart-empty"><div class="ce-ico">🛒</div><p style="font-weight:800;margin-bottom:6px;">Your cart is empty</p><p style="color:var(--mid);font-size:0.9rem;">Add some gifts to get started!</p></div>`;
+        foot.style.display = 'none'; return;
+      }
+      const total = cart.reduce((a, c) => a + c.price * c.qty, 0);
+      body.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="ci-img">${item.image_url ? `<img src="${item.image_url}" onerror="this.parentElement.textContent='${item.emoji}'">` : item.emoji}</div>
+          <div class="ci-info">
+            <div class="ci-name">${item.name}</div>
+            ${item.variant ? `<div class="ci-variant">Variant: ${esc(item.variant)}</div>` : ''}
+            ${item.custom_images ? `<div style="font-size:0.75rem;color:var(--green);font-weight:700;margin-bottom:4px;">📸 6 Custom Photos Attached</div>` : ''}
+            <div class="ci-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+          </div>
+          <div class="ci-qty-ctrl">
+            <button class="qty-btn minus" onclick="decCart('${String(item.cart_key).replace(/'/g, "\\'")}')">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="incCart('${String(item.cart_key).replace(/'/g, "\\'")}')">+</button>
+          </div>
+        </div>`).join('');
+      document.getElementById('cart-total-val').textContent = `₹${total.toLocaleString('en-IN')}`;
+      foot.style.display = 'block';
+    }
+
+  function renderCheckout() {
+  const body  = document.getElementById('checkout-body');
+  const items = buyNowItem ? [buyNowItem] : cart;
+  const subtotal = items.reduce((a, c) => a + c.price * c.qty, 0);
+
+  // Validate applied coupon
+  if (appliedCoupon && appliedCoupon.min_order && subtotal < appliedCoupon.min_order) {
+    appliedCoupon = null;
+    showToast('Coupon removed: Minimum order not met.');
+  }
+
+  const validCoupons = availableCoupons.filter(c => !c.min_order || subtotal >= c.min_order);
+
+  let couponDiscount = 0;
+  let discountRowsHtml = ``;
+
+  if (appliedCoupon) {
+    if (appliedCoupon.discount_type === 'percent') {
+      couponDiscount = Math.round(subtotal * (appliedCoupon.discount_value / 100));
+    } else {
+      couponDiscount = appliedCoupon.discount_value;
+    }
+    if (couponDiscount > subtotal) couponDiscount = subtotal;
+    
+    discountRowsHtml += `<div class="os-row" style="color:var(--green);">
+      <span>Discount (${appliedCoupon.code}) <button onclick="removeCoupon()" style="background:none;border:none;color:var(--coral);font-weight:800;font-size:0.75rem;cursor:pointer;">[Remove]</button></span>
+      <span>-₹${couponDiscount.toLocaleString('en-IN')}</span>
+    </div>`;
+  }
+
+  let finalTotal = subtotal - couponDiscount;
+  if (finalTotal < 0) finalTotal = 0;
+
+  const steps = `<div class="chk-steps">
+    <div class="chk-step ${checkoutStep === 1 ? 'active' : checkoutStep > 1 ? 'done' : ''}">📍 Address</div>
+    <div class="chk-step ${checkoutStep === 2 ? 'active' : ''}">💳 Payment</div>
+  </div>`;
+
+  if (checkoutStep === 1) {
+    const a = checkoutAddress || {};
+    body.innerHTML = `${steps}
+      <h3 style="font-size:1.05rem;font-weight:900;margin-bottom:16px;">Delivery Details</h3>
+      <div class="form-group"><label>Full Name *</label><input id="f-name" type="text" placeholder="Enter your full name" value="${a.name || ''}"><div class="err-msg" id="e-name">Please enter your name</div></div>
+      <div class="form-group"><label>Mobile Number *</label><input id="f-mobile" type="tel" placeholder="10-digit number" maxlength="10" value="${a.mobile || ''}"><div class="err-msg" id="e-mobile">Enter a valid 10-digit number</div></div>
+      <div class="form-group"><label>PIN Code *</label><input id="f-pin" type="text" placeholder="6-digit PIN" maxlength="6" value="${a.pin || ''}"><div class="err-msg" id="e-pin">Enter a valid 6-digit PIN</div></div>
+      <div class="form-group"><label>Address *</label><input id="f-addr" type="text" placeholder="House no., Street, Area" value="${a.addr || ''}"><div class="err-msg" id="e-addr">Please enter your address</div></div>
+      <div class="form-row">
+        <div class="form-group"><label>City *</label><input id="f-city" type="text" placeholder="City" value="${a.city || ''}"><div class="err-msg" id="e-city">Required</div></div>
+        <div class="form-group"><label>State *</label><select id="f-state"><option value="">Select State</option>${STATES.map(s => `<option value="${s}" ${a.state === s ? 'selected' : ''}>${s}</option>`).join('')}</select><div class="err-msg" id="e-state">Required</div></div>
+      </div>
+      <button class="btn-primary" onclick="validateAddr()">Continue to Payment →</button>`;
+
+  } else if (checkoutStep === 2) {
+    body.innerHTML = `${steps}
+
+      <div class="coupon-section">
+        <div style="font-size:0.85rem;font-weight:800;margin-bottom:8px;text-transform:uppercase;color:var(--mid);">Have a Promo Code?</div>
+        <div class="coupon-input-row">
+          <input id="coupon-input" type="text" placeholder="Enter code" value="${appliedCoupon ? appliedCoupon.code : ''}" ${appliedCoupon ? 'disabled' : ''}>
+          <button class="coupon-btn" onclick="applyCouponManually()" ${appliedCoupon ? 'disabled' : ''}>Apply</button>
+        </div>
+        ${!appliedCoupon && validCoupons.length > 0 ? `
+          <div class="suggested-tags">
+            ${validCoupons.map(c => `
+              <div class="coup-tag" onclick="applyCoupon('${c.code}')">
+                <strong>${c.code}</strong> • ${c.discount_type === 'percent' ? c.discount_value + '% OFF' : '₹' + c.discount_value + ' OFF'}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="order-summary">
+        <div style="font-size:0.85rem;color:var(--mid);font-weight:800;margin-bottom:12px;text-transform:uppercase;">Order Summary</div>
+        ${items.map(c => `
+          <div class="os-row">
+            <span>
+              ${c.name}${c.variant ? ` <span style="font-size:0.8em;color:var(--mid);">(${esc(c.variant)})</span>` : ''} 
+              × ${c.qty}
+              ${c.custom_images ? `<br><span style="font-size:0.75em;color:var(--green)">📸 6 Custom Photos Attached</span>` : ''}
+            </span>
+            <span>₹${(c.price * c.qty).toLocaleString('en-IN')}</span>
+          </div>`).join('')}
+        <div class="os-row"><span>Delivery</span><span style="color:var(--green);font-weight:800;">FREE</span></div>
+        ${discountRowsHtml}
+        <div class="os-total"><span>Total</span><span style="color:var(--coral);">₹${finalTotal.toLocaleString('en-IN')}</span></div>
+      </div>
+
+      <div style="font-size:0.95rem;font-weight:900;margin-bottom:14px;">Payment Method</div>
+
+      <div class="pay-option selected">
+        <div class="pay-ico">💵</div>
+        <div class="pay-info">
+          <div class="pay-title">Cash on Delivery</div>
+          <div class="pay-desc">Pay <strong>₹${finalTotal.toLocaleString('en-IN')}</strong> when your order arrives</div>
+        </div>
+        <div class="pay-check">✓</div>
+      </div>
+
+      <button class="btn-primary" onclick="placeOrder()">
+        Place Order — Pay ₹${finalTotal.toLocaleString('en-IN')} on Delivery 🎁
+      </button>
+      <button class="btn-secondary" onclick="checkoutStep=1;renderCheckout()">← Back</button>
+      <div style="text-align:center;margin-top:18px;">
+        <a href="return.html" target="_blank" style="font-size:0.85rem;color:var(--mid);text-decoration:underline;font-weight:700;">📋 Return Policy</a>
+      </div>`;
+  }
+}
+
+    
     function goSlide(idx, el) {
       const c = document.getElementById('carousel'); if (!c) return;
       c.scrollTo({ left: idx * c.clientWidth, behavior: 'smooth' });
@@ -1042,31 +1304,44 @@
     // ── CART ──
     function saveCart() { store.set('kasu_cart', cart); }
 
-    function addToCart(pid) {
-      const p = products.find(x => x.id === pid); if (!p) return;
-      fireCartAdded();
-      const variant    = getActiveVariant(p);
-      const price      = variant ? variant.price : p.price;
-      const variantKey = variant ? `${pid}_${variant.label}` : `${pid}`;
+function addToCart(pid) {
+  const p = products.find(x => x.id === pid); if (!p) return;
+  const isCustom = (p.custom === true || String(p.custom).toLowerCase() === 'true');
+  
+  if (isCustom && tempCustomImages.length !== 6) {
+    showToast('⚠️ Please upload exactly 6 photos for this custom product.');
+    return;
+  }
 
-      const ex = cart.find(c => String(c.cart_key) === String(variantKey));
-      if (ex) {
-        ex.qty++;
-      } else {
-        cart.push({
-          cart_key:    variantKey,
-          product_id:  p.id,
-          name:        p.name,
-          price:       price,
-          emoji:       p.emoji || '🎁',
-          image_url:   p.image_url || '',
-          qty:         1,
-          variant:     variant ? variant.label : null
-        });
-      }
-      saveCart(); updateBadge();
-    }
+  fireCartAdded();
+  const variant    = getActiveVariant(p);
+  const price      = variant ? variant.price : p.price;
+  const variantKey = variant ? `${pid}_${variant.label}` : `${pid}`;
 
+  const ex = cart.find(c => String(c.cart_key) === String(variantKey));
+  if (ex) {
+    ex.qty++;
+    if (isCustom) ex.custom_images = [...tempCustomImages]; 
+  } else {
+    cart.push({
+      cart_key:    variantKey,
+      product_id:  p.id,
+      name:        p.name,
+      price:       price,
+      emoji:       p.emoji || '🎁',
+      image_url:   p.image_url || '',
+      qty:         1,
+      variant:     variant ? variant.label : null,
+      custom_images: isCustom ? [...tempCustomImages] : null
+    });
+  }
+  
+  tempCustomImages = []; // Clear memory
+  if (document.getElementById('custom-img-grid')) document.getElementById('custom-img-grid').innerHTML = '';
+  if (document.getElementById('custom-file-input')) document.getElementById('custom-file-input').value = '';
+
+  saveCart(); updateBadge(); openCart();
+}
     function incCart(cartKey) {
       const item = cart.find(c => String(c.cart_key) === String(cartKey)); if (!item) return;
       item.qty++; saveCart(); updateBadge(); renderCart();
@@ -1079,27 +1354,37 @@
     }
     function updateBadge() { document.getElementById('cart-count').textContent = cart.reduce((a, c) => a + c.qty, 0); }
 
-    function buyNow(pid) {
-      const p = products.find(x => x.id === pid); if (!p) return;
-      const variant = getActiveVariant(p);
-      const price   = variant ? variant.price : p.price;
-      buyNowItem = {
-        cart_key:   variant ? `${pid}_${variant.label}` : `${pid}`,
-        product_id: p.id,
-        name:       p.name,
-        price:      price,
-        emoji:      p.emoji || '🎁',
-        image_url:  p.image_url || '',
-        qty:        1,
-        variant:    variant ? variant.label : null
-      };
-      closeAll();
-      checkoutStep = 1;
-      selectedPayment = 'cod';
-      appliedCoupon = null; // reset coupon
-      renderCheckout();
-      openPanel('checkout-panel');
-    }
+ function buyNow(pid) {
+  const p = products.find(x => x.id === pid); if (!p) return;
+  const isCustom = (p.custom === true || String(p.custom).toLowerCase() === 'true');
+
+  if (isCustom && tempCustomImages.length !== 6) {
+    showToast('⚠️ Please upload exactly 6 photos for this custom product.');
+    return;
+  }
+
+  const variant = getActiveVariant(p);
+  const price   = variant ? variant.price : p.price;
+  buyNowItem = {
+    cart_key:   variant ? `${pid}_${variant.label}` : `${pid}`,
+    product_id: p.id,
+    name:       p.name,
+    price:      price,
+    emoji:      p.emoji || '🎁',
+    image_url:  p.image_url || '',
+    qty:        1,
+    variant:    variant ? variant.label : null,
+    custom_images: isCustom ? [...tempCustomImages] : null
+  };
+
+  tempCustomImages = []; // Clear memory
+
+  closeAll();
+  checkoutStep = 1;
+  appliedCoupon = null; 
+  renderCheckout();
+  openPanel('checkout-panel');
+}
 
     function openCart() { closeAll(); renderCart(); openPanel('cart-panel'); }
 
@@ -1178,144 +1463,10 @@
       renderCheckout();
     }
 
-    function renderCheckout() {
-      const body  = document.getElementById('checkout-body');
-      const items = buyNowItem ? [buyNowItem] : cart;
-      const subtotal = items.reduce((a, c) => a + c.price * c.qty, 0);
 
-      // Validate applied coupon against CURRENT subtotal
-      if (appliedCoupon && appliedCoupon.min_order && subtotal < appliedCoupon.min_order) {
-        appliedCoupon = null;
-        showToast('Coupon removed: Minimum order not met.');
-      }
-
-      // Filter available suggestion tags for current subtotal
-      const validCoupons = availableCoupons.filter(c => !c.min_order || subtotal >= c.min_order);
-
-      let couponDiscount = 0;
-      let discountRowsHtml = ``;
-
-      if (appliedCoupon) {
-        if (appliedCoupon.discount_type === 'percent') {
-          couponDiscount = Math.round(subtotal * (appliedCoupon.discount_value / 100));
-        } else { // 'flat'
-          couponDiscount = appliedCoupon.discount_value;
-        }
-        if (couponDiscount > subtotal) couponDiscount = subtotal;
-        
-        discountRowsHtml += `<div class="os-row" style="color:var(--green);">
-          <span>Discount (${appliedCoupon.code}) <button onclick="removeCoupon()" style="background:none;border:none;color:var(--coral);font-weight:800;font-size:0.75rem;cursor:pointer;">[Remove]</button></span>
-          <span>-₹${couponDiscount.toLocaleString('en-IN')}</span>
-        </div>`;
-      }
-
-      let totalForCod = subtotal - couponDiscount;
-
-      let upiDiscount = selectedPayment === 'upi' ? 50 : 0;
-      if (upiDiscount > totalForCod) upiDiscount = totalForCod;
-
-      if (selectedPayment === 'upi') {
-        discountRowsHtml += `<div class="os-row" style="color:var(--green);">
-          <span>Prepaid Discount (UPI)</span>
-          <span>-₹${upiDiscount.toLocaleString('en-IN')}</span>
-        </div>`;
-      }
-
-      let finalTotal = totalForCod - upiDiscount;
-      const codAmtToPay = Math.round(totalForCod * 0.4); 
-      const codAmtUpi   = Math.round(totalForCod * 0.6);
-      const totalForUpi = totalForCod - 50 < 0 ? 0 : totalForCod - 50;
-
-      const steps = `<div class="chk-steps">
-        <div class="chk-step ${checkoutStep === 1 ? 'active' : checkoutStep > 1 ? 'done' : ''}">📍 Address</div>
-        <div class="chk-step ${checkoutStep === 2 ? 'active' : ''}">💳 Payment</div>
-      </div>`;
-
-      if (checkoutStep === 1) {
-        const a = checkoutAddress || {};
-        body.innerHTML = `${steps}
-          <h3 style="font-size:1.05rem;font-weight:900;margin-bottom:16px;">Delivery Details</h3>
-          <div class="form-group"><label>Full Name *</label><input id="f-name" type="text" placeholder="Enter your full name" value="${a.name || ''}"><div class="err-msg" id="e-name">Please enter your name</div></div>
-          <div class="form-group"><label>Mobile Number *</label><input id="f-mobile" type="tel" placeholder="10-digit number" maxlength="10" value="${a.mobile || ''}"><div class="err-msg" id="e-mobile">Enter a valid 10-digit number</div></div>
-          <div class="form-group"><label>PIN Code *</label><input id="f-pin" type="text" placeholder="6-digit PIN" maxlength="6" value="${a.pin || ''}"><div class="err-msg" id="e-pin">Enter a valid 6-digit PIN</div></div>
-          <div class="form-group"><label>Address *</label><input id="f-addr" type="text" placeholder="House no., Street, Area" value="${a.addr || ''}"><div class="err-msg" id="e-addr">Please enter your address</div></div>
-          <div class="form-row">
-            <div class="form-group"><label>City *</label><input id="f-city" type="text" placeholder="City" value="${a.city || ''}"><div class="err-msg" id="e-city">Required</div></div>
-            <div class="form-group"><label>State *</label><select id="f-state"><option value="">Select State</option>${STATES.map(s => `<option value="${s}" ${a.state === s ? 'selected' : ''}>${s}</option>`).join('')}</select><div class="err-msg" id="e-state">Required</div></div>
-          </div>
-          <button class="btn-primary" onclick="validateAddr()">Continue to Payment →</button>`;
-
-      } else if (checkoutStep === 2) {
-        body.innerHTML = `${steps}
-
-          <div class="coupon-section">
-            <div style="font-size:0.85rem;font-weight:800;margin-bottom:8px;text-transform:uppercase;color:var(--mid);">Have a Promo Code?</div>
-            <div class="coupon-input-row">
-              <input id="coupon-input" type="text" placeholder="Enter code" value="${appliedCoupon ? appliedCoupon.code : ''}" ${appliedCoupon ? 'disabled' : ''}>
-              <button class="coupon-btn" onclick="applyCouponManually()" ${appliedCoupon ? 'disabled' : ''}>Apply</button>
-            </div>
-            ${!appliedCoupon && validCoupons.length > 0 ? `
-              <div class="suggested-tags">
-                ${validCoupons.map(c => `
-                  <div class="coup-tag" onclick="applyCoupon('${c.code}')">
-                    <strong>${c.code}</strong> • ${c.discount_type === 'percent' ? c.discount_value + '% OFF' : '₹' + c.discount_value + ' OFF'}
-                  </div>
-                `).join('')}
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="order-summary">
-            <div style="font-size:0.85rem;color:var(--mid);font-weight:800;margin-bottom:12px;text-transform:uppercase;">Order Summary</div>
-            ${items.map(c => `
-              <div class="os-row">
-                <span>${c.name}${c.variant ? ` <span style="font-size:0.8em;color:var(--mid);">(${esc(c.variant)})</span>` : ''} × ${c.qty}</span>
-                <span>₹${(c.price * c.qty).toLocaleString('en-IN')}</span>
-              </div>`).join('')}
-            <div class="os-row"><span>Delivery</span><span style="color:var(--green);font-weight:800;">FREE</span></div>
-            ${discountRowsHtml}
-            <div class="os-total"><span>Total</span><span style="color:var(--coral);">₹${finalTotal.toLocaleString('en-IN')}</span></div>
-          </div>
-
-          <div style="font-size:0.95rem;font-weight:900;margin-bottom:14px;">Choose Payment Method</div>
-
-          <div class="pay-option ${selectedPayment === 'cod' ? 'selected' : ''}" onclick="selectPayment('cod')">
-            <div class="pay-ico">💵</div>
-            <div class="pay-info">
-              <div class="pay-title">Cash on Delivery</div>
-              <div class="pay-desc">
-                Pay <strong>₹${codAmtToPay.toLocaleString('en-IN')}</strong> (40%) when your order arrives
-                <br><span style="color:var(--coral);font-weight:800;">+ ₹${codAmtUpi.toLocaleString('en-IN')} (60%) prepaid via UPI</span>
-              </div>
-              <div style="margin-top:6px;"><span class="pay-badge pay-badge-cod">60% Prepaid · 40% COD</span></div>
-            </div>
-            <div class="pay-check">${selectedPayment === 'cod' ? '✓' : ''}</div>
-          </div>
-
-          <div class="pay-option ${selectedPayment === 'upi' ? 'selected' : ''}" onclick="selectPayment('upi')">
-            <div class="pay-ico">📲</div>
-            <div class="pay-info">
-              <div class="pay-title">UPI / Online Payment</div>
-              <div class="pay-desc">Pay the full amount ₹${totalForUpi.toLocaleString('en-IN')} online via UPI</div>
-              <div style="margin-top:6px;"><span class="pay-badge pay-badge-upi">Save extra ₹50 · 100% Prepaid</span></div>
-            </div>
-            <div class="pay-check">${selectedPayment === 'upi' ? '✓' : ''}</div>
-          </div>
-
-          <button class="btn-primary" onclick="placeOrder()">
-            ${selectedPayment === 'cod'
-              ? `Place Order — Pay ₹${codAmtToPay.toLocaleString('en-IN')} on Delivery 🎁`
-              : `Place Order — Pay ₹${totalForUpi.toLocaleString('en-IN')} via UPI 📲`}
-          </button>
-          <button class="btn-secondary" onclick="checkoutStep=1;renderCheckout()">← Back</button>
-          <div style="text-align:center;margin-top:18px;">
-            <a href="return.html" target="_blank" style="font-size:0.85rem;color:var(--mid);text-decoration:underline;font-weight:700;">📋 Return Policy</a>
-          </div>`;
-      }
-    }
-
-    function selectPayment(method) { selectedPayment = method; renderCheckout(); }
-
+    function selectPayment(method) { 
+  // No longer needed since we only have COD, but kept for compatibility
+}
     function validateAddr() {
       const rules = [
         ['f-name',   'e-name',   v => v.trim().length >= 2],
@@ -1336,102 +1487,108 @@
       checkoutStep = 2; renderCheckout();
     }
 
-    async function placeOrder() {
-      const a = checkoutAddress;
-      const items = buyNowItem ? [buyNowItem] : cart;
+   async function placeOrder() {
+  const a = checkoutAddress;
+  const items = buyNowItem ? [buyNowItem] : cart;
+  
+  const subtotal = items.reduce((s, c) => s + c.price * c.qty, 0);
+  const totalQty = items.reduce((acc, c) => acc + c.qty, 0);
+  
+  let couponDiscount = 0;
+  if (appliedCoupon) {
+    couponDiscount = appliedCoupon.discount_type === 'percent' 
+      ? Math.round(subtotal * (appliedCoupon.discount_value / 100)) 
+      : appliedCoupon.discount_value;
+  }
+  
+  let finalTotal = subtotal - couponDiscount;
+  if (finalTotal < 0) finalTotal = 0;
+
+  const finalItemsRecord = items.map(c => ({
+    product_id: c.product_id,
+    name: c.name,
+    price: c.price,
+    qty: c.qty,
+    variant: c.variant || null,
+    custom_images: c.custom_images || null 
+  }));
+
+  const orderId = 'KASU-' + Date.now().toString(36).toUpperCase();
+  const body = document.getElementById('checkout-body');
+  body.innerHTML = '<div class="load-txt"><div class="loader"></div><p>Placing your order…</p></div>';
+
+  let userIP = 'Unknown';
+  try { 
+    const ipRes = await fetch('https://api.ipify.org?format=json'); 
+    const ipData = await ipRes.json(); 
+    if (ipData.ip) userIP = ipData.ip; 
+  } catch (e) {}
+
+  try {
+    await sb('orders', 'POST', {
+      order_id: orderId,
+      customer_name: a.name,
+      mobile: a.mobile,
+      address: `${a.addr}, ${a.city}, ${a.state} - ${a.pin}`,
+      items: JSON.stringify(finalItemsRecord),
+      total: finalTotal,
+      coupon_code: appliedCoupon ? appliedCoupon.code : null,
+      discount_amount: couponDiscount,
+      payment_method: 'cod',
+      status: 'processing',
+      ip_address: userIP
+    });
+  } catch (e) { 
+    console.warn('Order save failed:', e.message);
+    showToast('⚠️ Order failed. Please try again.');
+    return;
+  }
+
+  fbq('track', 'Purchase', {
+    value: finalTotal, 
+    currency: 'INR',
+    content_ids: items.map(c => String(c.product_id)),
+    content_type: 'product',
+    contents: items.map(c => ({ id: String(c.product_id), quantity: c.qty, item_price: c.price })),
+    num_items: totalQty,
+    order_id: orderId
+  });
+
+  orderIds.push(orderId);
+  store.set('kasu_orders', orderIds);
+  if (!buyNowItem) { 
+    cart = []; 
+    saveCart(); 
+    updateBadge(); 
+  }
+  
+  buyNowItem = null;
+  appliedCoupon = null;
+
+  body.innerHTML = `
+    <div class="success-wrap">
+      <div class="success-ico">✅</div>
+      <div class="success-title">Order Placed Successfully!</div>
+      <div class="success-sub">Thank you, ${a.name}! Your order has been confirmed.</div>
       
-      const subtotal = items.reduce((s, c) => s + c.price * c.qty, 0);
-      const totalQty = items.reduce((acc, c) => acc + c.qty, 0);
+      <div class="order-id-box">
+        <div class="oid-lbl">Order ID</div>
+        <div class="oid-val">${orderId}</div>
+      </div>
+      <div class="addr-box">
+        <div class="addr-name">${a.name} · ${a.mobile}</div>
+        <div class="addr-detail">${a.addr}, ${a.city}, ${a.state} – ${a.pin}</div>
+      </div>
       
-      let couponDiscount = 0;
-      if (appliedCoupon) {
-        couponDiscount = appliedCoupon.discount_type === 'percent' 
-          ? Math.round(subtotal * (appliedCoupon.discount_value / 100)) 
-          : appliedCoupon.discount_value;
-      }
+      <div class="cod-box">
+        <span class="cod-lbl">Amount to Pay on Delivery</span>
+        <span class="cod-amt">₹${finalTotal.toLocaleString('en-IN')}</span>
+      </div>
       
-      let finalTotal = subtotal - couponDiscount;
-      if (finalTotal < 0) finalTotal = 0;
-
-      let upiDiscount = 0;
-      if (selectedPayment === 'upi') {
-        upiDiscount = 50;
-        finalTotal -= upiDiscount;
-        if (finalTotal < 0) finalTotal = 0;
-      }
-
-      const totalDiscountAmt = couponDiscount + upiDiscount;
-
-      const finalItemsRecord = items.map(c => ({
-            product_id: c.product_id,
-            name:       c.name,
-            price:      c.price,
-            qty:        c.qty,
-            variant:    c.variant || null
-      }));
-
-      const orderId = 'KASU-' + Date.now().toString(36).toUpperCase();
-      const body    = document.getElementById('checkout-body');
-      body.innerHTML = '<div class="load-txt"><div class="loader"></div><p>Placing your order…</p></div>';
-
-      let userIP = 'Unknown';
-      try { const ipRes = await fetch('https://api.ipify.org?format=json'); const ipData = await ipRes.json(); if (ipData.ip) userIP = ipData.ip; } catch (e) {}
-
-      try {
-        await sb('orders', 'POST', {
-          order_id:       orderId,
-          customer_name:  a.name,
-          mobile:         a.mobile,
-          address:        `${a.addr}, ${a.city}, ${a.state} - ${a.pin}`,
-          items:          JSON.stringify(finalItemsRecord),
-          total:          finalTotal,
-          coupon_code:     appliedCoupon ? appliedCoupon.code : null,
-          discount_amount: totalDiscountAmt,
-          payment_method: selectedPayment,
-          status:         'processing',
-          ip_address:     userIP
-        });
-      } catch (e) { console.warn('Order save failed:', e.message); }
-
-      fbq('track', 'Purchase', {
-        value: finalTotal, currency: 'INR',
-        content_ids:  items.map(c => String(c.product_id)),
-        content_type: 'product',
-        contents:     items.map(c => ({ id: String(c.product_id), quantity: c.qty, item_price: c.price })),
-        num_items:    totalQty,
-        order_id:     orderId
-      });
-
-      orderIds.push(orderId);
-      store.set('kasu_orders', orderIds);
-      if (!buyNowItem) { cart = []; saveCart(); updateBadge(); }
-      
-      buyNowItem = null;
-      appliedCoupon = null; // Clear usage
-
-      body.innerHTML = `
-        <div class="success-wrap">
-          <div class="success-ico">⏳</div>
-          <div class="success-title">To confirm order message below</div>
-          <div class="success-sub">Thank you, ${a.name}!<br>Please follow the instructions below to confirm your order.</div>
-          <div style="background:var(--white);border:2px dashed var(--coral);border-radius:var(--radius);padding:20px;margin-bottom:24px;text-align:center;">
-            <h3 style="font-size:1.1rem;color:var(--coral);font-weight:900;margin-bottom:6px;">📸 Send your photos</h3>
-            <p style="font-size:0.85rem;color:var(--mid);margin-bottom:14px;line-height:1.5;">Send us your photos via WhatsApp or Instagram DM.</p>
-            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-              <a href="https://wa.me/919474955991" target="_blank" style="flex:1;min-width:140px;background:#25D366;color:white;padding:13px 10px;border-radius:10px;font-weight:800;text-decoration:none;font-size:0.88rem;display:flex;align-items:center;justify-content:center;gap:6px;">💬 WhatsApp</a>
-              <a href="https://ig.me/m/kasugifts" target="_blank" style="flex:1;min-width:140px;background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:white;padding:13px 10px;border-radius:10px;font-weight:800;text-decoration:none;font-size:0.88rem;display:flex;align-items:center;justify-content:center;gap:6px;">📸 Instagram DM</a>
-            </div>
-          </div>
-          <div class="order-id-box"><div class="oid-lbl">Order ID</div><div class="oid-val">${orderId}</div></div>
-          <div class="addr-box"><div class="addr-name">${a.name} · ${a.mobile}</div><div class="addr-detail">${a.addr}, ${a.city}, ${a.state} – ${a.pin}</div></div>
-          ${selectedPayment === 'cod'
-            ? `<div class="cod-box"><span class="cod-lbl">Amount to Pay on Delivery</span><span class="cod-amt">₹${Math.round(finalTotal * 0.4).toLocaleString('en-IN')}</span></div>`
-            : ''}
-          <button class="btn-primary" onclick="closeAll();showPage('home')">Continue Shopping 🛍️</button>
-          <button class="btn-secondary" style="margin-top:12px;" onclick="closeAll();openTrack()">Track Order 📦</button>
-        </div>`;
-    }
-
+      <button class="btn-primary" onclick="closeAll();showPage('home')">Continue Shopping 🛍️</button>
+      <button class="btn-secondary" style="margin-top:12px;" onclick="closeAll();openTrack()">Track Order 📦</button>
+    </div>`;
+}
     // ── TRACK ──
     function buildTrackCard(o) {
       const cur = STATUSES.indexOf((o.status || 'processing').toLowerCase());
