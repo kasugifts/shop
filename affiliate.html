@@ -26,7 +26,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; overflow-x: hidden; }
 
-    /* ── ANIMATIONS ── */
     @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -34,7 +33,6 @@
     .animate-up { animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
 
     /* ── HEADER ── */
     header { background: var(--white); height: 64px; padding: 0 5%; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 900; }
@@ -67,39 +65,14 @@
     .example-math div { display: flex; justify-content: space-between; border-bottom: 1px solid #f0e8e0; padding-bottom: 8px; }
     .example-math div:last-child { border-bottom: none; font-weight: 900; font-size: 1.15rem; padding-top: 8px; color: var(--green); }
 
-    /* ── AUTH FORMS ── */
-    .auth-card { background: var(--white); border-radius: var(--radius); padding: 36px; box-shadow: var(--shadow); border: 1px solid #f0e8e0; margin-bottom: 40px; }
-    .auth-tabs { display: flex; border-bottom: 2px solid #f0e8e0; margin-bottom: 28px; position: relative; }
-    .auth-tab { flex: 1; text-align: center; padding: 14px; font-size: 1.05rem; font-weight: 800; color: #aaa; cursor: pointer; transition: 0.3s; position: relative; }
-    .auth-tab:hover { color: var(--mid); }
-    .auth-tab.active { color: var(--coral); }
-    .auth-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--coral); border-radius: 3px 3px 0 0; animation: fadeIn 0.3s; }
-
-    .form-panel { display: none; animation: fadeIn 0.4s ease; }
-    .form-panel.active { display: block; }
-
-    .form-group { margin-bottom: 20px; text-align: left; }
-    .form-group label { display: block; font-size: 0.82rem; font-weight: 800; color: var(--mid); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; }
-    .form-group input, .form-group select { width: 100%; padding: 15px 18px; border: 2px solid #f0e8e0; border-radius: 12px; font-size: 1rem; font-family: inherit; background: var(--light); transition: all 0.25s; color: var(--dark); outline: none; }
-    .form-group input:focus, .form-group select:focus { border-color: var(--coral); background: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(218, 110, 89, 0.08); }
-    .form-group input.err { border-color: #e74c3c !important; background: #fff5f5; }
-    .err-msg { font-size: 0.78rem; color: #e74c3c; margin-top: 6px; display: none; font-weight: 700; animation: fadeIn 0.2s; }
-    .err-msg.show { display: block; }
+    /* ── AUTH CARD ── */
+    .auth-card { background: var(--white); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); border: 1px solid #f0e8e0; margin-bottom: 40px; text-align: center; }
+    .auth-card h2 { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; color: var(--dark); }
+    .auth-card p { font-size: 0.95rem; color: var(--mid); margin-bottom: 24px; }
     
-    /* Buttons */
-    .btn-primary { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--coral), #c45f4a); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: all 0.25s; margin-top: 10px; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(218, 110, 89, 0.25); }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(218, 110, 89, 0.35); }
-    .btn-primary:active:not(:disabled) { transform: translateY(0); }
-    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    /* Google Button - Moved to Top */
-    .btn-google { width: 100%; padding: 16px; background: white; color: var(--dark); border: 2px solid #f0e8e0; border-radius: 12px; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: inherit; margin-bottom: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-    .btn-google img { width: 22px; height: 22px; }
-    .btn-google:hover { border-color: #ddd; background: #f9f9f9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); }
-
-    .divider { display: flex; align-items: center; text-align: center; margin-bottom: 24px; color: #aaa; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 2px solid #f0e8e0; }
-    .divider span { padding: 0 16px; }
+    .btn-google { width: 100%; max-width: 350px; margin: 0 auto; padding: 16px; background: white; color: var(--dark); border: 2px solid #e0d8d0; border-radius: 12px; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: inherit; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+    .btn-google img { width: 24px; height: 24px; }
+    .btn-google:hover { border-color: var(--coral); background: var(--light); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(218, 110, 89, 0.15); }
 
     /* ── DASHBOARD STYLES ── */
     .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: var(--white); padding: 24px; border-radius: var(--radius); border: 1px solid #f0e8e0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
@@ -119,12 +92,24 @@
     .copy-btn { background: var(--dark); color: white; border: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.2s; font-family: inherit; }
     .copy-btn:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
+    .payout-card { background: var(--white); border-radius: var(--radius); padding: 32px 24px; border: 1px solid #f0e8e0; text-align: center; }
+    .btn-primary { padding: 16px 40px; background: linear-gradient(135deg, var(--coral), #c45f4a); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: all 0.25s; font-family: inherit; box-shadow: 0 6px 20px rgba(218, 110, 89, 0.25); display: inline-flex; align-items: center; justify-content: center; gap: 8px;}
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(218, 110, 89, 0.35); }
+
     /* ── MODAL OVERLAY ── */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
     .overlay.show { display: flex; animation: fadeIn 0.3s; }
     .payout-modal { background: white; width: min(450px, 90%); border-radius: var(--radius); padding: 32px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
     .modal-close { position: absolute; top: 16px; right: 16px; background: var(--light); border: none; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .modal-close:hover { background: var(--coral); color: white; transform: rotate(90deg); }
+
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 800; color: var(--mid); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .form-group input, .form-group select { width: 100%; padding: 15px 18px; border: 2px solid #f0e8e0; border-radius: 12px; font-size: 1rem; font-family: inherit; background: var(--light); transition: all 0.25s; color: var(--dark); outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--coral); background: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(218, 110, 89, 0.08); }
+    .form-group input.err { border-color: #e74c3c !important; background: #fff5f5; }
+    .err-msg { font-size: 0.78rem; color: #e74c3c; margin-top: 6px; display: none; font-weight: 700; animation: fadeIn 0.2s; }
+    .err-msg.show { display: block; }
 
     .loader-sm { border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; display: none; }
 
@@ -146,7 +131,7 @@
 
   <div class="home-wrap">
     
-    <!-- AUTH SECTION (Shown if not logged in) -->
+    <!-- LOGIN SECTION (Shown if not logged in) -->
     <div id="auth-section">
       <div class="hero-card animate-up">
         <h1>Earn 20% on Every Sale! 💸</h1>
@@ -154,14 +139,14 @@
         
         <div class="steps-grid">
           <div class="step-box">
-            <div class="step-ico">📝</div>
-            <div class="step-title">1. Sign Up</div>
-            <div class="step-desc">Register below in 30 seconds to get your custom code.</div>
+            <div class="step-ico">🚀</div>
+            <div class="step-title">1. One-Click Login</div>
+            <div class="step-desc">Sign in with Google to instantly generate your promo code.</div>
           </div>
           <div class="step-box">
             <div class="step-ico">📢</div>
             <div class="step-title">2. Share Link</div>
-            <div class="step-desc">Share your link or code on WhatsApp, Insta, or YouTube.</div>
+            <div class="step-desc">Post your link on WhatsApp, Insta, or YouTube.</div>
           </div>
           <div class="step-box">
             <div class="step-ico">💰</div>
@@ -182,69 +167,13 @@
       </div>
 
       <div class="auth-card animate-up delay-1">
-        <div class="auth-tabs">
-          <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
-          <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</div>
-        </div>
-
-        <!-- Login Form (DEFAULT) -->
-        <div id="form-login" class="form-panel active">
-          <button class="btn-google" onclick="handleGoogleLogin()">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-            Continue with Google
-          </button>
-          
-          <div class="divider"><span>OR</span></div>
-
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="log-email" placeholder="example@example.com" oninput="clearErr(this)">
-            <div class="err-msg" id="err-log-email">Please enter a valid email address.</div>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="log-pass" placeholder="Enter your password" oninput="clearErr(this)">
-            <div class="err-msg" id="err-log-pass">Password is required.</div>
-          </div>
-          <button class="btn-primary" id="btn-login" onclick="handleLogin()">
-            <div class="loader-sm" id="load-login"></div> <span>Login to Dashboard →</span>
-          </button>
-        </div>
-
-        <!-- Sign Up Form -->
-        <div id="form-signup" class="form-panel">
-          <button class="btn-google" onclick="handleGoogleLogin()">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-            Sign up with Google
-          </button>
-          
-          <div class="divider"><span>OR</span></div>
-
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="reg-name" placeholder="John Doe" oninput="clearErr(this)">
-            <div class="err-msg" id="err-reg-name">Name is required.</div>
-          </div>
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="reg-email" placeholder="example@example.com" oninput="clearErr(this)">
-            <div class="err-msg" id="err-reg-email">Please enter a valid email address.</div>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="reg-pass" placeholder="Create a strong password (min 6 chars)" oninput="clearErr(this)">
-            <div class="err-msg" id="err-reg-pass">Password must be at least 6 characters.</div>
-          </div>
-          <div class="form-group">
-            <label>Preferred Promo Code (e.g. JOHN50)</label>
-            <input type="text" id="reg-code" placeholder="Create your custom code" style="text-transform: uppercase;" oninput="clearErr(this)">
-            <div class="err-msg" id="err-reg-code">Code must be letters and numbers only.</div>
-            <div style="font-size:0.75rem; color:var(--mid); margin-top:6px; font-weight:700;">This will be used in your referral link.</div>
-          </div>
-          <button class="btn-primary" id="btn-signup" onclick="handleSignup()">
-            <div class="loader-sm" id="load-signup"></div> <span>Create Affiliate Account ✨</span>
-          </button>
-        </div>
+        <h2>Access Dashboard</h2>
+        <p>Log in or sign up to manage your links and request payouts.</p>
+        
+        <button class="btn-google" onclick="handleGoogleLogin()">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+          Continue with Google
+        </button>
       </div>
     </div>
 
@@ -258,7 +187,7 @@
       <div class="link-card animate-up delay-1">
         <h3>🔗 Your Unique Referral Link & Code</h3>
         <p style="font-size:0.95rem; color:var(--mid); margin-bottom:18px;">
-          Share this link on Instagram, WhatsApp, or YouTube. Anyone who buys through it gets <strong>₹50 OFF</strong> automatically!
+          Share this link! Anyone who buys through it automatically gets <strong>₹50 OFF</strong>.
         </p>
         <div class="ref-link-box" id="dash-link">https://kasugifts.com/?ref=CODE</div>
         <button class="copy-btn" onclick="copyLink()">📋 Copy Link</button>
@@ -269,23 +198,19 @@
 
       <div class="stats-grid animate-up delay-2">
         <div class="stat-card">
-          <div class="stat-val" id="stat-clicks">0</div>
-          <div class="stat-lbl">Total Clicks</div>
-        </div>
-        <div class="stat-card">
           <div class="stat-val" id="stat-sales">0</div>
           <div class="stat-lbl">Successful Sales</div>
         </div>
         <div class="stat-card">
           <div class="stat-val" id="stat-earnings">₹0</div>
-          <div class="stat-lbl">Available Balance</div>
+          <div class="stat-lbl">Total Earnings</div>
         </div>
       </div>
 
-      <div class="auth-card animate-up delay-3" style="text-align: center; padding: 32px 24px;">
+      <div class="payout-card animate-up delay-2">
         <h3 style="font-size:1.25rem; font-weight:900; margin-bottom:12px;">Withdraw Earnings</h3>
-        <p style="font-size:0.9rem; color:var(--mid); margin-bottom:20px;">Minimum payout threshold is ₹500.</p>
-        <button class="btn-primary" style="width: auto; padding: 16px 40px; margin: 0 auto;" onclick="openPayoutModal()">Request Payout 💸</button>
+        <p style="font-size:0.9rem; color:var(--mid); margin-bottom:20px;">Minimum payout threshold is ₹500. Payouts are processed within 48 hours.</p>
+        <button class="btn-primary" onclick="openPayoutModal()">Request Payout 💸</button>
       </div>
     </div>
 
@@ -296,7 +221,7 @@
     <div class="payout-modal">
       <button class="modal-close" onclick="closePayoutModal()">✕</button>
       <h2 style="font-size:1.4rem; font-weight:900; margin-bottom:12px;">Request Payout</h2>
-      <p style="font-size:0.9rem; color:var(--mid); margin-bottom:24px; line-height:1.5;">Provide your details below. We process payouts directly to your account within 48 hours.</p>
+      <p style="font-size:0.9rem; color:var(--mid); margin-bottom:24px; line-height:1.5;">Provide your details below. We process payouts directly to your account.</p>
       
       <div class="form-group">
         <label>Payment Method</label>
@@ -306,7 +231,6 @@
         </select>
       </div>
 
-      <!-- UPI Fields -->
       <div id="fields-upi">
         <div class="form-group">
           <label>UPI ID *</label>
@@ -315,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Bank Fields -->
       <div id="fields-bank" style="display:none;">
         <div class="form-group">
           <label>Account Holder Name *</label>
@@ -334,7 +257,7 @@
         </div>
       </div>
 
-      <button class="btn-primary" id="btn-payout" onclick="submitPayout()" style="margin-top:24px;">
+      <button class="btn-primary" id="btn-payout" onclick="submitPayout()" style="width: 100%;">
         <div class="loader-sm" id="load-payout"></div> <span>Submit Request</span>
       </button>
     </div>
@@ -352,8 +275,13 @@
     const SB_URL = 'https://aawhuykfhjsjtwrstnvt.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhd2h1eWtmaGpzanR3cnN0bnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2OTAxMDQsImV4cCI6MjA4ODI2NjEwNH0.6EE9pY3rFBmvgs6c5hHQ4WMnHp8XIm-dV9V-J2129sk';
 
-    // Initialize the JS Client (for Google Auth)
+    // Initialize the JS Client
     const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+
+    // Alert if not on a server
+    if (window.location.protocol === 'file:') {
+      alert("⚠️ Google Login will not work when opening the file directly (file://). Please use a local server or upload it to your website.");
+    }
 
     // REST function (for custom database table logic)
     async function sb(path, method = 'GET', body = null) {
@@ -371,29 +299,11 @@
       } catch (e) { clearTimeout(tid); throw e; }
     }
 
-    // ── UI HELPERS & VALIDATION ──
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     function showToast(msg) {
       const t = document.getElementById('toast'); 
       t.textContent = msg; 
       t.classList.add('show'); 
       setTimeout(() => t.classList.remove('show'), 3000);
-    }
-
-    function switchTab(tab) {
-      document.getElementById('tab-login').classList.remove('active');
-      document.getElementById('tab-signup').classList.remove('active');
-      document.getElementById('form-login').classList.remove('active');
-      document.getElementById('form-signup').classList.remove('active');
-
-      document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('form-' + tab).classList.add('active');
-    }
-
-    function toggleLoader(btnId, loadId, isLoading) {
-      document.getElementById(btnId).disabled = isLoading;
-      document.getElementById(loadId).style.display = isLoading ? 'block' : 'none';
     }
 
     function throwErr(inputId, errId) {
@@ -409,58 +319,67 @@
 
     // ── AUTH LOGIC ──
 
-    // This handles the redirect when a user comes back from Google Auth
-    async function processGoogleAuthCallback() {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (session && session.user) {
-        const email = session.user.email;
-        let name = session.user.user_metadata?.full_name || email.split('@')[0];
+    // Listen for Google Auth Redirects Automatically
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        const user = session.user;
+        const email = user.email;
+        let name = user.user_metadata?.full_name || email.split('@')[0];
 
         try {
-          // Check if Google user already exists in our custom affiliates table
+          // Check if Google user already exists in custom affiliates table
           const users = await sb(`affiliates?email=eq.${email}&select=*`);
+          let affiliateData;
           
           if (users.length > 0) {
-            // Already registered, just log them in
-            localStorage.setItem('kasu_affiliate_user', JSON.stringify({ name: users[0].name, email: users[0].email, code: users[0].code }));
+            // Already registered
+            affiliateData = { name: users[0].name, email: users[0].email, code: users[0].code };
           } else {
-            // New Google User - Generate a promo code and register them automatically
+            // New User - Generate a unique code
             let baseName = name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6).toUpperCase();
-            let newCode = baseName + Math.floor(100 + Math.random() * 900);
+            let randomStr = Math.random().toString(36).substring(2, 5).toUpperCase();
+            let newCode = `${baseName}${randomStr}`;
             
             const newUser = { name, email, password: 'google-oauth-user', code: newCode };
             await sb('affiliates', 'POST', newUser);
-            localStorage.setItem('kasu_affiliate_user', JSON.stringify({ name, email, code: newCode }));
+            
+            affiliateData = { name, email, code: newCode };
           }
           
-          showToast('✅ Google Login successful!');
+          localStorage.setItem('kasu_affiliate_user', JSON.stringify(affiliateData));
+          checkAuth();
           
-          // Clear URL hash to make it clean
+          // Clean the URL to remove the huge Google Token Hash
           if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.pathname);
           }
-          
         } catch (e) {
-          showToast('⚠️ Could not sync Google account to database.');
+          showToast('⚠️ Could not sync account.');
           console.error(e);
         }
       }
-      checkAuth();
-    }
+    });
 
     // Trigger Google Auth
     async function handleGoogleLogin() {
+      if (window.location.protocol === 'file:') {
+        showToast('⚠️ Google Auth blocked. Must run on a live website.');
+        return;
+      }
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.href // Returns user back to this exact page
+          redirectTo: window.location.href // Return user here
         }
       });
-      if (error) showToast('⚠️ Google Login failed. Try again later.');
+      
+      if (error) {
+        console.error(error);
+        showToast('⚠️ Google Login failed.');
+      }
     }
 
-    // Initial check for normal login
     function checkAuth() {
       const userStr = localStorage.getItem('kasu_affiliate_user');
       if (userStr) {
@@ -471,100 +390,20 @@
         document.getElementById('dash-name').textContent = user.name.split(' ')[0]; // Show first name
         document.getElementById('dash-code').textContent = user.code;
         
+        // Build link dynamically based on the actual domain
         const baseUrl = window.location.origin + window.location.pathname.replace('affiliate.html', 'index.html');
         document.getElementById('dash-link').textContent = `${baseUrl}?ref=${user.code}`;
         
-        loadDashboardStats(user.email);
+        loadDashboardStats(user.code);
       } else {
         document.getElementById('auth-section').style.display = 'block';
         document.getElementById('dashboard-section').style.display = 'none';
       }
     }
 
-    async function handleSignup() {
-      let isValid = true;
-      const name = document.getElementById('reg-name').value.trim();
-      const email = document.getElementById('reg-email').value.trim().toLowerCase();
-      const pass = document.getElementById('reg-pass').value.trim();
-      const code = document.getElementById('reg-code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-
-      if (!name) { throwErr('reg-name', 'err-reg-name'); isValid = false; }
-      if (!emailRegex.test(email)) { throwErr('reg-email', 'err-reg-email'); isValid = false; }
-      if (pass.length < 6) { throwErr('reg-pass', 'err-reg-pass'); isValid = false; }
-      if (!code) { throwErr('reg-code', 'err-reg-code'); isValid = false; }
-
-      if (!isValid) return;
-
-      toggleLoader('btn-signup', 'load-signup', true);
-
-      try {
-        const check = await sb(`affiliates?or=(email.eq.${email},code.eq.${code})`);
-        if (check.length > 0) {
-          const conflict = check[0];
-          if (conflict.email === email) showToast('⚠️ This email is already registered.');
-          else showToast('⚠️ This promo code is already taken. Try another.');
-          toggleLoader('btn-signup', 'load-signup', false);
-          return;
-        }
-
-        const newUser = { name, email, password: pass, code };
-        await sb('affiliates', 'POST', newUser);
-        
-        localStorage.setItem('kasu_affiliate_user', JSON.stringify({ name, email, code }));
-        showToast('🎉 Account created! Welcome aboard.');
-        checkAuth();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } catch (e) {
-        showToast('⚠️ Network error. Please try again.');
-      }
-      toggleLoader('btn-signup', 'load-signup', false);
-    }
-
-    async function handleLogin() {
-      let isValid = true;
-      const email = document.getElementById('log-email').value.trim().toLowerCase();
-      const pass = document.getElementById('log-pass').value.trim();
-      
-      if (!emailRegex.test(email)) { throwErr('log-email', 'err-log-email'); isValid = false; }
-      if (!pass) { throwErr('log-pass', 'err-log-pass'); isValid = false; }
-
-      if (!isValid) return;
-
-      toggleLoader('btn-login', 'load-login', true);
-
-      try {
-        const users = await sb(`affiliates?email=eq.${email}&password=eq.${pass}&select=*`);
-        
-        if (users.length > 0) {
-          const u = users[0];
-          localStorage.setItem('kasu_affiliate_user', JSON.stringify({ name: u.name, email: u.email, code: u.code }));
-          showToast('✅ Login successful!');
-          checkAuth();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          showToast('❌ Invalid email or password.');
-          throwErr('log-email', 'err-log-email');
-          throwErr('log-pass', 'err-log-pass');
-        }
-      } catch (e) {
-        showToast('⚠️ Could not log in. Check your connection.');
-      }
-
-      toggleLoader('btn-login', 'load-login', false);
-    }
-
     async function logout() {
       localStorage.removeItem('kasu_affiliate_user');
-      
-      // If user was logged in via Google, sign them out of Supabase Auth too
-      await supabase.auth.signOut();
-      
-      // Clear forms
-      document.querySelectorAll('input').forEach(el => el.value = '');
-      document.querySelectorAll('.err-msg').forEach(el => el.classList.remove('show'));
-      document.querySelectorAll('input').forEach(el => el.classList.remove('err'));
-      
-      switchTab('login');
+      await supabase.auth.signOut(); // Ensure Google session is wiped
       checkAuth();
       showToast('Logged out successfully.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -576,17 +415,27 @@
     }
 
     // ── DASHBOARD & PAYOUT LOGIC ──
-    async function loadDashboardStats(email) {
+
+    // FIX for the referral program: We calculate sales and earnings dynamically
+    // straight from the orders table. This ensures the data is always 100% accurate.
+    async function loadDashboardStats(userCode) {
       try {
-        const data = await sb(`affiliates?email=eq.${email}&select=total_clicks,total_sales,total_earnings`);
-        if (data.length > 0) {
-          const stats = data[0];
-          document.getElementById('stat-clicks').textContent = stats.total_clicks || 0;
-          document.getElementById('stat-sales').textContent = stats.total_sales || 0;
-          document.getElementById('stat-earnings').textContent = '₹' + (stats.total_earnings || 0);
-        }
+        // Find all orders where this person's code was used
+        const orders = await sb(`orders?affiliate_code=eq.${userCode}&select=affiliate_commission`);
+        
+        let totalSales = orders.length;
+        let totalEarnings = 0;
+        
+        orders.forEach(order => {
+           // Sum up all commissions
+           totalEarnings += (Number(order.affiliate_commission) || 0);
+        });
+
+        document.getElementById('stat-sales').textContent = totalSales;
+        document.getElementById('stat-earnings').textContent = '₹' + totalEarnings;
+        
       } catch (e) {
-        console.warn("Failed to load stats");
+        console.warn("Failed to load real-time stats", e);
       }
     }
 
@@ -621,7 +470,8 @@
       }
 
       if (isValid) {
-        toggleLoader('btn-payout', 'load-payout', true);
+        document.getElementById('btn-payout').disabled = true;
+        document.getElementById('load-payout').style.display = 'block';
         
         try {
           const userStr = localStorage.getItem('kasu_affiliate_user');
@@ -637,18 +487,20 @@
           
           setTimeout(() => {
             closePayoutModal();
-            toggleLoader('btn-payout', 'load-payout', false);
+            document.getElementById('btn-payout').disabled = false;
+            document.getElementById('load-payout').style.display = 'none';
           }, 1500);
 
         } catch(e) {
           showToast('⚠️ Could not submit request. Check connection.');
-          toggleLoader('btn-payout', 'load-payout', false);
+          document.getElementById('btn-payout').disabled = false;
+          document.getElementById('load-payout').style.display = 'none';
         }
       }
     }
 
-    // Run on load
-    processGoogleAuthCallback();
+    // Run auth check on load
+    checkAuth();
   </script>
 </body>
 </html>
